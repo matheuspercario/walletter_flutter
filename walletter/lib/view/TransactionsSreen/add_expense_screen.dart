@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:walletter/model/addTransactionModel.dart';
+import 'package:walletter/model/TransactionModel.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:intl/intl.dart';
 
@@ -12,7 +12,7 @@ class AddExpense extends StatefulWidget {
 
 class _AddExpenseState extends State<AddExpense> {
   final GlobalKey<FormState> formKeyExpense = new GlobalKey<FormState>();
-  final AddExpenseForm expenseForm = new AddExpenseForm();
+  final TransactionForm expenseForm = new TransactionForm();
 
   DateTime _dateTime = DateTime.now();
 
@@ -96,7 +96,7 @@ class _AddExpenseState extends State<AddExpense> {
         });
       },
       onSaved: (_) {
-        expenseForm.date = _dateTime;
+        expenseForm.date = _dateTime.toString();
       },
     );
   }
