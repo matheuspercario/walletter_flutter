@@ -18,10 +18,10 @@ class DatabaseLocalServer {
 
   String transactionTable = "transactions_table";
   String colId = "id";
-  String colType = "type";
   String colValue = "value";
   String colDate = "date";
   String colDescription = "description";
+  String colCategory = "category";
 
   Future<Database> get database async {
     if (_database == null) {
@@ -47,14 +47,14 @@ class DatabaseLocalServer {
   //  CREATE TABLE DB
   _createDb(Database db, int newVersion) async {
     await db.execute(
-      "CREATE TABLE $transactionTable ($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colValue TEXT, $colDate TEXT, $colDescription TEXT)",
+      "CREATE TABLE $transactionTable ($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colValue TEXT, $colDate TEXT, $colDescription TEXT, $colCategory TEXT)",
     );
   }
 
   // INSERT ON DB
-  Future<int> insertTransaction(TransactionForm income) async {
+  Future<int> insertTransaction(TransactionForm transaction) async {
     Database db = await this.database;
-    int result = await db.insert(transactionTable, income.toMap());
+    int result = await db.insert(transactionTable, transaction.toMap());
     notify();
     return result;
   }
@@ -62,15 +62,15 @@ class DatabaseLocalServer {
   // QUERY: Retorna tudo que tem no banco.
   getTransactionList() async {
     Database db = await this.database;
-    var transactionsMapList =
+    var transactionMapList =
         await db.rawQuery("SELECT * FROM $transactionTable");
     List<TransactionForm> transactionsList = [];
     List<int> idList = [];
-    for (int i = 0; i < transactionsMapList.length; i++) {
+    for (int i = 0; i < transactionMapList.length; i++) {
       TransactionForm transaction =
-          TransactionForm.fromMap(transactionsMapList[i]);
+          TransactionForm.fromMap(transactionMapList[i]);
       transactionsList.add(transaction);
-      idList.add(transactionsMapList[i]["id"]);
+      idList.add(transactionMapList[i]["id"]);
     }
     return [transactionsList, idList];
   }

@@ -2,27 +2,27 @@ class TransactionForm {
   String _value;
   String _date;
   String _description;
-  String _type;
+  String _category;
   // var _confirmed = false;
 
   TransactionForm() {
     _value = "";
     _date = "";
     _description = "";
-    _type = "";
+    _category = "";
   }
 
   TransactionForm.fromMap(map) {
     this._value = map["value"];
     this._date = map["date"];
     this._description = map["description"];
-    this._type = map["type"];
+    this._category = map["category"];
   }
 
   String get value => _value;
   String get date => _date;
   String get description => _description;
-  String get type => _type;
+  String get category => _category;
 
   set value(String newValue) {
     if (newValue.length > 0) {
@@ -42,18 +42,18 @@ class TransactionForm {
     }
   }
 
-  set type(String newType) {
-    if (newType.length > 0) {
-      this._type = newType;
+  set category(String newCategory) {
+    if (newCategory.length > 0) {
+      this._category = newCategory;
     }
   }
 
   toMap() {
     var map = Map<String, dynamic>();
-    map["title"] = _value;
+    map["value"] = _value;
     map["date"] = _date;
     map["description"] = _description;
-    map["type"] = _type;
+    // map["category"] = _category;
     return map;
   }
 
@@ -61,6 +61,6 @@ class TransactionForm {
     print("Valor: $value");
     print("Date: $date");
     print("Description: $description");
-    print("Tipo: $type");
+    print("Tipo: $category");
   }
 }
