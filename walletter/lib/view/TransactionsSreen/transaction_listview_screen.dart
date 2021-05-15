@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/logic/manage_db/manage_db_event.dart';
+import 'package:walletter/logic/manage_db/manage_local_db_bloc.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
 import 'package:walletter/logic/monitor_db/monitor_local_db_bloc.dart';
 
@@ -45,7 +47,11 @@ class _TransactionsListViewState extends State<TransactionsListView> {
               confirmDismiss: (direction) async {
                 await showDialog(
                   context: context,
-                  builder: (_) => generateConfirmationDialog(),
+                  builder: (_) => generateConfirmationDialog(
+                    transactionList,
+                    idList,
+                    position,
+                  ),
                   barrierDismissible: false,
                 );
               },
@@ -88,7 +94,7 @@ class _TransactionsListViewState extends State<TransactionsListView> {
     );
   }
 
-  Widget generateConfirmationDialog() {
+  Widget generateConfirmationDialog(transactionList, idList, position) {
     return AlertDialog(
       title: Text(
         "Confirme para prosseguir",
@@ -100,6 +106,11 @@ class _TransactionsListViewState extends State<TransactionsListView> {
         TextButton(
           child: Text("Sim"),
           onPressed: () {
+            BlocProvider.of<ManageLocalBloc>(context).add(
+              DeleteEvent(
+                transactionId: idList[position],
+              ),
+            );
             Navigator.of(context).pop();
           },
         ),
