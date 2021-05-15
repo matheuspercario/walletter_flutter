@@ -3,7 +3,6 @@ class TransactionForm {
   String _date;
   String _description;
   String _category;
-  // var _confirmed = false;
 
   TransactionForm() {
     _value = "";
@@ -53,7 +52,7 @@ class TransactionForm {
     map["value"] = _value;
     map["date"] = _date;
     map["description"] = _description;
-    // map["category"] = _category;
+    map["category"] = _category;
     return map;
   }
 

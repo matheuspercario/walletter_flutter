@@ -11,7 +11,7 @@ class TransactionsListView extends StatefulWidget {
 }
 
 class _TransactionsListViewState extends State<TransactionsListView> {
-  final Map translate = {
+  final Map translateCategory = {
     'expense': 0,
     'income': 1,
   };
@@ -66,7 +66,6 @@ class _TransactionsListViewState extends State<TransactionsListView> {
   }
 
   Card listviewCard(transactionList, position) {
-    // print(transactionList[position].category);
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       elevation: 7,
@@ -74,10 +73,17 @@ class _TransactionsListViewState extends State<TransactionsListView> {
         title: Text(transactionList[position].description),
         subtitle: Text(transactionList[position].date),
         leading: Icon(
-          icons[1],
-          //color: colors[translate[transactionList[position].category]],
+          icons[translateCategory[transactionList[position].category]],
+          color: colors[translateCategory[transactionList[position].category]],
         ),
-        trailing: Text(transactionList[position].value),
+        trailing: Text(
+          transactionList[position].value,
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: colors[
+                  translateCategory[transactionList[position].category]]),
+        ),
       ),
     );
   }

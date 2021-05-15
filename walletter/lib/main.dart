@@ -3,6 +3,7 @@ import 'package:walletter/view/TransactionsSreen/add_expense_screen.dart';
 import 'package:walletter/view/TransactionsSreen/add_income_screen.dart';
 import 'package:walletter/view/login/login.dart';
 import 'package:walletter/view/bottom_navigation_bar.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
   runApp(MyApp());

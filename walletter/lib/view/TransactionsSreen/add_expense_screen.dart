@@ -1,78 +1,87 @@
 import 'package:flutter/material.dart';
-import 'package:walletter/model/TransactionModel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/logic/manage_db/manage_db_event.dart';
+import 'package:walletter/logic/manage_db/manage_db_state.dart';
+import 'package:walletter/logic/manage_db/manage_local_db_bloc.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:intl/intl.dart';
+import 'package:walletter/model/transactionModel.dart';
 
 class AddExpense extends StatefulWidget {
-  AddExpense({Key key}) : super(key: key);
-
   @override
   _AddExpenseState createState() => _AddExpenseState();
 }
 
 class _AddExpenseState extends State<AddExpense> {
-  final GlobalKey<FormState> formKeyExpense = new GlobalKey<FormState>();
-  final TransactionForm expenseForm = new TransactionForm();
+  final GlobalKey<FormState> formKeyIncome = new GlobalKey<FormState>();
 
   DateTime _dateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Nova Despesa',
+    return BlocProvider(
+      create: (_) => ManageLocalBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Nova Despesa',
+          ),
+          backgroundColor: Colors.redAccent.shade700,
         ),
-        backgroundColor: Colors.redAccent.shade700,
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 50, left: 50),
-                child: myexpenseForm(),
-              )
-            ],
+        body: SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 50, left: 50),
+                  child: myIncomeForm(),
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget myexpenseForm() {
-    return Form(
-      key: formKeyExpense,
-      child: Column(
-        children: [
-          SizedBox(
-            height: 120,
-          ),
-          valueInputForm(),
-          SizedBox(
-            height: 70,
-          ),
-          valueDateForm(),
-          SizedBox(
-            height: 20,
-          ),
-          valueDescriptionForm(),
-          SizedBox(
-            height: 100,
-          ),
-          submitInformations(),
-          SizedBox(
-            height: 50,
-          ),
-        ],
-      ),
-    );
+  Widget myIncomeForm() {
+    return BlocBuilder<ManageLocalBloc, ManageState>(builder: (context, state) {
+      TransactionForm expenseForm;
+      expenseForm = new TransactionForm();
+
+      return Form(
+        key: formKeyIncome,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 120,
+            ),
+            valueInputForm(expenseForm),
+            SizedBox(
+              height: 70,
+            ),
+            valueDateForm(expenseForm),
+            SizedBox(
+              height: 20,
+            ),
+            valueDescriptionForm(expenseForm),
+            SizedBox(
+              height: 100,
+            ),
+            submitInformations(expenseForm, context),
+            SizedBox(
+              height: 50,
+            ),
+          ],
+        ),
+      );
+    });
   }
 
-  Widget valueDateForm() {
+  Widget valueDateForm(TransactionForm expenseForm) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: DateFormat("dd/MM/yyyy").format(_dateTime).toString(),
@@ -87,7 +96,7 @@ class _AddExpenseState extends State<AddExpense> {
           lastDate: DateTime.now().add(const Duration(days: 100)),
         ).then((picked) {
           if (picked == null) {
-            print("Don't piked any date...");
+            print("Don't picked any date...");
           } else {
             setState(() {
               _dateTime = picked;
@@ -96,12 +105,13 @@ class _AddExpenseState extends State<AddExpense> {
         });
       },
       onSaved: (_) {
-        expenseForm.date = _dateTime.toString();
+        expenseForm.date =
+            DateFormat("dd/MM/yyyy hh:mm").format(_dateTime).toString();
       },
     );
   }
 
-  Widget valueDescriptionForm() {
+  Widget valueDescriptionForm(TransactionForm expenseForm) {
     return TextFormField(
       keyboardType: TextInputType.multiline,
       maxLines: null,
@@ -124,7 +134,7 @@ class _AddExpenseState extends State<AddExpense> {
     );
   }
 
-  Widget valueInputForm() {
+  Widget valueInputForm(TransactionForm expenseForm) {
     return TextFormField(
       style: TextStyle(fontSize: 32),
       inputFormatters: [
@@ -154,16 +164,8 @@ class _AddExpenseState extends State<AddExpense> {
     );
   }
 
-  Widget submitInformations() {
+  Widget submitInformations(TransactionForm expenseForm, context) {
     return ElevatedButton(
-      onPressed: () {
-        if (formKeyExpense.currentState.validate()) {
-          formKeyExpense.currentState.save();
-          expenseForm.doSomething();
-          // Navigator.pushReplacementNamed(context, '/homepage');
-          Navigator.pop(context);
-        }
-      },
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Icon(
@@ -177,6 +179,17 @@ class _AddExpenseState extends State<AddExpense> {
         primary: Colors.redAccent.shade400,
         shape: CircleBorder(),
       ),
+      onPressed: () {
+        if (formKeyIncome.currentState.validate()) {
+          formKeyIncome.currentState.save();
+          expenseForm.category = "expense";
+          expenseForm.doSomething();
+          BlocProvider.of<ManageLocalBloc>(context)
+              .add(SubmitEvent(transaction: expenseForm));
+          Navigator.pop(context);
+          // Navigator.pushReplacementNamed(context, '/homepage');
+        }
+      },
     );
   }
 }

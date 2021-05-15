@@ -14,7 +14,6 @@ class AddIncome extends StatefulWidget {
 
 class _AddIncomeState extends State<AddIncome> {
   final GlobalKey<FormState> formKeyIncome = new GlobalKey<FormState>();
-  // final TransactionForm incomeForm = new TransactionForm();
 
   DateTime _dateTime = DateTime.now();
 
@@ -106,7 +105,8 @@ class _AddIncomeState extends State<AddIncome> {
         });
       },
       onSaved: (_) {
-        incomeForm.date = _dateTime.toString();
+        incomeForm.date =
+            DateFormat("dd/MM/yyyy hh:mm").format(_dateTime).toString();
       },
     );
   }
