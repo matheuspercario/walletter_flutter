@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:walletter/logic/manage_db/manage_db_event.dart';
 import 'package:walletter/logic/manage_db/manage_local_db_bloc.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
-import 'package:walletter/logic/monitor_db/monitor_local_db_bloc.dart';
+import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
 
 class TransactionsListView extends StatefulWidget {
   @override

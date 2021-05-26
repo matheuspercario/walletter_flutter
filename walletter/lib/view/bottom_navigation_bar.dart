@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:walletter/logic/manage_db/manage_local_db_bloc.dart';
-import 'package:walletter/logic/monitor_db/monitor_local_db_bloc.dart';
+import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
 
 import 'HomeScreen/home_screen.dart';
 import 'TransactionsSreen/transaction_listview_screen.dart';
