@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 
-import 'package:walletter/data/remote/remote_database.dart';
+import 'package:walletter/data/remote_database.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_event.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
 import 'package:walletter/model/transactionModel.dart';

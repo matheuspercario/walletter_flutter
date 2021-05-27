@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:walletter/data/remote/remote_database.dart';
+import 'package:walletter/data/remote_database.dart';
 import 'package:walletter/logic/manage_db/manage_db_event.dart';
 import 'package:walletter/logic/manage_db/manage_db_state.dart';
 
