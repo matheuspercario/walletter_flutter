@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:walletter/logic/manage_db/manage_db_event.dart';
 import 'package:walletter/logic/manage_db/manage_db_state.dart';
-import 'package:walletter/logic/manage_db/manage_local_db_bloc.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:intl/intl.dart';
+import 'package:walletter/logic/manage_db/manage_remote_db_bloc.dart';
 import 'package:walletter/model/transactionModel.dart';
 
 class AddIncome extends StatefulWidget {
@@ -20,7 +20,7 @@ class _AddIncomeState extends State<AddIncome> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ManageLocalBloc(),
+      create: (_) => ManageRemoteBloc(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -48,7 +48,8 @@ class _AddIncomeState extends State<AddIncome> {
   }
 
   Widget myIncomeForm() {
-    return BlocBuilder<ManageLocalBloc, ManageState>(builder: (context, state) {
+    return BlocBuilder<ManageRemoteBloc, ManageState>(
+        builder: (context, state) {
       TransactionForm incomeForm;
       incomeForm = new TransactionForm();
 
@@ -89,12 +90,13 @@ class _AddIncomeState extends State<AddIncome> {
       ),
       onTap: () async {
         FocusScope.of(context).requestFocus(new FocusNode());
-        final DateTime picked = await showDatePicker(
+        await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime.now().add(const Duration(days: 100)),
-        ).then((picked) {
+          // ignore: missing_return
+        ).then((picked) async {
           if (picked == null) {
             print("Don't picked any date...");
           } else {
@@ -184,7 +186,7 @@ class _AddIncomeState extends State<AddIncome> {
           formKeyIncome.currentState.save();
           incomeForm.category = "income";
           incomeForm.doSomething();
-          BlocProvider.of<ManageLocalBloc>(context)
+          BlocProvider.of<ManageRemoteBloc>(context)
               .add(SubmitEvent(transaction: incomeForm));
           Navigator.pop(context);
           // Navigator.pushReplacementNamed(context, '/homepage');

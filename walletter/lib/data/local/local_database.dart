@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:walletter/model/transactionModel.dart';
 
 class DatabaseLocalServer {
-  /**
+  /*
    * Criando Singletion
    * 
    * Apenas um objeto da classe pode ser instanciado, ou seja, ela sabe tudo o que acontecerá no DB.
@@ -85,7 +85,7 @@ class DatabaseLocalServer {
     return result;
   }
 
-  /**
+  /*
    * STREAM -> Notifica quem quiser ouvir
    */
 

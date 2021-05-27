@@ -6,14 +6,16 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:dio/dio.dart';
 
 class DatabaseRemoteServer {
-  /**
+  /*
    * Criando Singleton
    */
   static DatabaseRemoteServer helper = DatabaseRemoteServer._createInstance();
 
   DatabaseRemoteServer._createInstance();
 
-  String databaseUrl = "http://192.168.1.6:3000/transactions/";
+  // String databaseUrl = "http://192.168.1.6:3000/transactions/";
+  String databaseUrl =
+      "https://walletter-nodejs-server.herokuapp.com/transactions/";
 
   Dio _dio = Dio();
 
@@ -77,7 +79,7 @@ class DatabaseRemoteServer {
     return 1;
   }
 
-  /**
+  /*
    * STREAM -> Notifica quem quiser ouvir
    */
 
@@ -93,7 +95,7 @@ class DatabaseRemoteServer {
       _controller = StreamController();
 
       Socket socket = io(
-        'http://192.168.1.6:3000/',
+        'https://walletter-nodejs-server.herokuapp.com/',
         OptionBuilder().setTransports(['websocket']).build(),
       );
       socket.on('invalidate', (_) => notify());
@@ -112,13 +114,13 @@ class DatabaseRemoteServer {
 }
 
 void main() async {
-  DatabaseRemoteServer transactionService = DatabaseRemoteServer.helper;
+  // DatabaseRemoteServer transactionService = DatabaseRemoteServer.helper;
 
-  TransactionForm transaction = TransactionForm();
-  transaction.value = "R\$ 9999.99";
-  transaction.date = "99/99/9999";
-  transaction.description = "Teste via linha de comando";
-  transaction.category = "income";
+  // TransactionForm transaction = TransactionForm();
+  // transaction.value = "R\$ 9999.99";
+  // transaction.date = "99/99/9999";
+  // transaction.description = "Teste via linha de comando";
+  // transaction.category = "income";
 
   //transactionService.insertTransaction(transaction);
   //transactionService.deleteTransaction(3);

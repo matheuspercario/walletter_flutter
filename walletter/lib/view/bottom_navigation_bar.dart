@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:walletter/logic/manage_db/manage_local_db_bloc.dart';
-import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
+import 'package:walletter/logic/manage_db/manage_remote_db_bloc.dart';
+import 'package:walletter/logic/monitor_db/monitor_remote_db_bloc.dart';
 
 import 'HomeScreen/home_screen.dart';
 import 'TransactionsSreen/transaction_listview_screen.dart';
@@ -13,19 +13,16 @@ class MyBottomNavigationBar extends StatefulWidget {
 }
 
 class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
-  int _currentIndex = 1;
-  List<Widget> _pages = [
-    TransactionsListView(),
-    HomeScreen(),
-    UserScreen(),
-  ];
+  var _currentIndex = 1;
+
+  var _pages = [TransactionsListView(), HomeScreen(), UserScreen()];
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => MonitorBloc()),
-        BlocProvider(create: (_) => ManageLocalBloc()),
+        BlocProvider(create: (_) => ManageRemoteBloc()),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -62,10 +59,17 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                 },
                 items: [
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.list_sharp), label: 'Transações'),
-                  BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
+                    icon: Icon(Icons.list_sharp),
+                    label: 'Transações',
+                  ),
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.person), label: 'Perfil')
+                    icon: Icon(Icons.home),
+                    label: '',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    label: 'Perfil',
+                  )
                 ],
               ),
             ),

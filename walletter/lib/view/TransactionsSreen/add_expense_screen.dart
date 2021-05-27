@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:walletter/logic/manage_db/manage_db_event.dart';
 import 'package:walletter/logic/manage_db/manage_db_state.dart';
-import 'package:walletter/logic/manage_db/manage_local_db_bloc.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:intl/intl.dart';
+import 'package:walletter/logic/manage_db/manage_remote_db_bloc.dart';
 import 'package:walletter/model/transactionModel.dart';
 
 class AddExpense extends StatefulWidget {
@@ -20,7 +20,7 @@ class _AddExpenseState extends State<AddExpense> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ManageLocalBloc(),
+      create: (_) => ManageRemoteBloc(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -48,7 +48,8 @@ class _AddExpenseState extends State<AddExpense> {
   }
 
   Widget myIncomeForm() {
-    return BlocBuilder<ManageLocalBloc, ManageState>(builder: (context, state) {
+    return BlocBuilder<ManageRemoteBloc, ManageState>(
+        builder: (context, state) {
       TransactionForm expenseForm;
       expenseForm = new TransactionForm();
 
@@ -89,12 +90,13 @@ class _AddExpenseState extends State<AddExpense> {
       ),
       onTap: () async {
         FocusScope.of(context).requestFocus(new FocusNode());
-        final DateTime picked = await showDatePicker(
+        await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime.now().add(const Duration(days: 100)),
-        ).then((picked) {
+          // ignore: missing_return
+        ).then((picked) async {
           if (picked == null) {
             print("Don't picked any date...");
           } else {
@@ -184,7 +186,7 @@ class _AddExpenseState extends State<AddExpense> {
           formKeyIncome.currentState.save();
           expenseForm.category = "expense";
           expenseForm.doSomething();
-          BlocProvider.of<ManageLocalBloc>(context)
+          BlocProvider.of<ManageRemoteBloc>(context)
               .add(SubmitEvent(transaction: expenseForm));
           Navigator.pop(context);
           // Navigator.pushReplacementNamed(context, '/homepage');
