@@ -37,8 +37,8 @@ class DatabaseRemoteServer {
     response.data.forEach(
       (element) {
         //element["dataLocation"] = 2;
-        TransactionForm note = TransactionForm.fromMap(element);
-        transactionList.add(note);
+        TransactionForm transaction = TransactionForm.fromMap(element);
+        transactionList.add(transaction);
         idList.add(element["id"]);
       },
     );
