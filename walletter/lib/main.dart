@@ -1,10 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:walletter/view/TransactionsSreen/add_expense_screen.dart';
 import 'package:walletter/view/TransactionsSreen/add_income_screen.dart';
 import 'package:walletter/view/login/login.dart';
 import 'package:walletter/view/bottom_navigation_bar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
