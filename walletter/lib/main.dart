@@ -1,18 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:walletter/view/TransactionsSreen/add_expense_screen.dart';
-import 'package:walletter/view/TransactionsSreen/add_income_screen.dart';
-import 'package:walletter/view/login/login.dart';
-import 'package:walletter/view/bottom_navigation_bar.dart';
+
+import 'package:walletter/view/wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(Launcher());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class Launcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,16 +18,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
-        //primaryColor: Colors.greenAccent[700],
         textTheme: TextTheme(),
         accentColor: Colors.white,
       ),
-      routes: {
-        '/': (context) => LoginPage(),
-        '/homepage': (context) => MyBottomNavigationBar(),
-        '/add_income': (context) => AddIncome(),
-        '/add_expense': (context) => AddExpense(),
-      },
-    ); // Gerenciador de Estados Automático
+      home: Wrapper(),
+    );
   }
 }
+
+

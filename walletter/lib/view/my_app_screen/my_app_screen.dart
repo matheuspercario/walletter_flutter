@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:walletter/view/my_app_screen/transaction_listview_screen.dart';
+import 'package:walletter/view/my_app_screen/user_screen.dart';
 
-import 'HomeScreen/home_screen.dart';
-import 'TransactionsSreen/transaction_listview_screen.dart';
-import 'UserScreen/user_screen.dart';
+import 'home_screen.dart';
+
 
 class MyBottomNavigationBar extends StatefulWidget {
   @override
