@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_event.dart';
 
 class UserScreen extends StatelessWidget {
   @override
@@ -116,19 +119,27 @@ class UserScreen extends StatelessWidget {
   }
 
   Widget logoutButton(BuildContext context) {
-    return ElevatedButton(
+    return ElevatedButton.icon(
       onPressed: () {
-        Navigator.pushReplacementNamed(context, '/');
+        // Navigator.pushReplacementNamed(context, '/');
+        BlocProvider.of<AuthBloc>(context).add(Logout());
       },
-      child: Text(
-        "Logout",
-        style: TextStyle(
-            fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
-      ),
       style: ElevatedButton.styleFrom(
         elevation: 10,
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
         primary: Colors.grey.shade300,
+      ),
+      label: Text(
+        "Logout",
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+      icon: Icon(
+        Icons.logout_outlined,
+        color: Colors.black,
       ),
     );
   }

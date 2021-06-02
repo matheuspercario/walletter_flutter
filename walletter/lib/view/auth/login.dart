@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:walletter/model/loginModel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_event.dart';
+// import 'package:walletter/model/loginModel.dart';
 import 'package:walletter/view/auth/register.dart';
 
 class LoginPage extends StatelessWidget {
   final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final LoginForm loginForm = new LoginForm();
+  final LoginUser loginData = new LoginUser(); // evento
+  // final LoginForm loginForm = new LoginForm();
 
   @override
   Widget build(BuildContext context) {
@@ -105,25 +109,29 @@ class LoginPage extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
+          // if (formKey.currentState.validate()) {
+          //   formKey.currentState.save();
+          //   loginForm.doSomething();
+          //   // Navigator.pushReplacementNamed(context, '/homepage');
+          //   // Navigator.pushNamed(context, '/homepage');
+          // } else {
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     SnackBar(
+          //       backgroundColor: Colors.red.shade600,
+          //       duration: Duration(seconds: 2),
+          //       content: Text("Email e/ou senha inválidos!"),
+          //       action: SnackBarAction(
+          //         label: "OK",
+          //         onPressed: () {
+          //           print("Funcionou");
+          //         },
+          //       ),
+          //     ),
+          //   );
+          // }
           if (formKey.currentState.validate()) {
             formKey.currentState.save();
-            loginForm.doSomething();
-            Navigator.pushReplacementNamed(context, '/homepage');
-            // Navigator.pushNamed(context, '/homepage');
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.red.shade600,
-                duration: Duration(seconds: 2),
-                content: Text("Email e/ou senha inválidos!"),
-                action: SnackBarAction(
-                  label: "OK",
-                  onPressed: () {
-                    print("Funcionou");
-                  },
-                ),
-              ),
-            );
+            BlocProvider.of<AuthBloc>(context).add(loginData);
           }
         },
         child: Text(
@@ -185,7 +193,7 @@ class LoginPage extends StatelessWidget {
         ),
       ),
       onSaved: (String inValue) {
-        loginForm.password = inValue;
+        loginData.password = inValue;
       },
     );
   }
@@ -233,7 +241,7 @@ class LoginPage extends StatelessWidget {
         return null;
       },
       onSaved: (String inValue) {
-        loginForm.username = inValue;
+        loginData.username = inValue;
       },
     );
   }

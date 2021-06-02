@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_state.dart';
 import 'package:walletter/view/auth/login.dart';
 import 'package:walletter/view/my_app_screen/TransactionsSreen/add_expense_screen.dart';
 import 'package:walletter/view/my_app_screen/TransactionsSreen/add_income_screen.dart';
@@ -8,7 +11,36 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //return MyApp();
-    return LoginPage();
+    //return LoginPage();
+    return BlocConsumer<AuthBloc, AuthState>(
+      builder: (BuildContext context, AuthState state) {
+        if (state is Authenticated) {
+          return MyApp();
+        } else {
+          return LoginPage();
+        }
+      },
+      listener: (context, state) {
+        if (state is AuthError) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text("Erro do Servidor"),
+                  content: Text("${state.message}"),
+                  actions: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Ok"),
+                    )
+                  ],
+                );
+              });
+        }
+      },
+    );
   }
 }
 
