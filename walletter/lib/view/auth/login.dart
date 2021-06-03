@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_event.dart';
-// import 'package:walletter/model/loginModel.dart';
 import 'package:walletter/view/auth/register.dart';
 
 class LoginPage extends StatelessWidget {
   final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
   final LoginUser loginData = new LoginUser(); // evento
-  // final LoginForm loginForm = new LoginForm();
 
   @override
   Widget build(BuildContext context) {
@@ -82,14 +80,7 @@ class LoginPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return RegisterPage();
-                  },
-                ),
-              );
+              Navigator.pushNamed(context, '/register');
             },
             child: Text(
               " Registre-se aqui!",

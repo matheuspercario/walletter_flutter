@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:walletter/model/registerModel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_event.dart';
+import 'package:walletter/view/auth/login.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -10,7 +13,8 @@ class RegisterPage extends StatefulWidget {
 
 class RegisterPageState extends State<RegisterPage> {
   GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  RegisterForm registerForm = new RegisterForm();
+  final RegisterUser registerData = new RegisterUser();
+  //RegisterForm registerForm = new RegisterForm();
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +129,7 @@ class RegisterPageState extends State<RegisterPage> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             Text(
-              "${registerForm.sliderValue.floor()}",
+              "${registerData.sliderValue.floor()}",
               style: TextStyle(
                   color: Colors.greenAccent.shade700,
                   fontSize: 18,
@@ -197,106 +201,6 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget mySlider() {
-    return Slider(
-      activeColor: Colors.greenAccent.shade700,
-      divisions: 100,
-      value: registerForm.sliderValue,
-      onChanged: (double inValue) {
-        setState(() {
-          registerForm.sliderValue = inValue;
-        });
-      },
-      min: 0,
-      max: 100,
-    );
-  }
-
-  Widget myRadio(int value) {
-    return Radio(
-      activeColor: Colors.greenAccent.shade700,
-      value: value,
-      groupValue: registerForm.radioValue,
-      onChanged: (int inValue) {
-        setState(() {
-          registerForm.radioValue = inValue;
-        });
-      },
-    );
-  }
-
-  Widget myCheckboxCasa() {
-    return Checkbox(
-      activeColor: Colors.greenAccent.shade700,
-      value: registerForm.checkBoxCasa,
-      onChanged: (bool value) {
-        setState(() {
-          registerForm.checkBoxCasa = value;
-        });
-      },
-    );
-  }
-
-  Widget myCheckboxCarro() {
-    return Checkbox(
-      activeColor: Colors.greenAccent.shade700,
-      value: registerForm.checkBoxCarro,
-      onChanged: (bool value) {
-        setState(() {
-          registerForm.checkBoxCarro = value;
-        });
-      },
-    );
-  }
-
-  Widget myCheckboxMoto() {
-    return Checkbox(
-      activeColor: Colors.greenAccent.shade700,
-      value: registerForm.checkBoxMoto,
-      onChanged: (bool value) {
-        setState(() {
-          registerForm.checkBoxMoto = value;
-        });
-      },
-    );
-  }
-
-  Widget myCheckboxBicicleta() {
-    return Checkbox(
-      activeColor: Colors.greenAccent.shade700,
-      value: registerForm.checkBoxBicicleta,
-      onChanged: (bool value) {
-        setState(() {
-          registerForm.checkBoxBicicleta = value;
-        });
-      },
-    );
-  }
-
-  Widget mySwitchDependents() {
-    return Switch(
-      activeColor: Colors.greenAccent.shade700,
-      value: registerForm.switchDependents,
-      onChanged: (bool inValue) {
-        setState(() {
-          registerForm.switchDependents = inValue;
-        });
-      },
-    );
-  }
-
-  Widget mySwitchCreditCard() {
-    return Switch(
-      activeColor: Colors.greenAccent.shade700,
-      value: registerForm.switchCreditCard,
-      onChanged: (bool inValue) {
-        setState(() {
-          registerForm.switchCreditCard = inValue;
-        });
-      },
-    );
-  }
-
   Widget registrationInfos() {
     return Column(
       children: [
@@ -341,7 +245,7 @@ class RegisterPageState extends State<RegisterPage> {
             return null;
           },
           onSaved: (String inValue) {
-            registerForm.fullName = inValue;
+            registerData.fullName = inValue;
           },
         ),
         SizedBox(
@@ -389,7 +293,7 @@ class RegisterPageState extends State<RegisterPage> {
             return null;
           },
           onSaved: (String inValue) {
-            registerForm.email = inValue;
+            registerData.username = inValue;
           },
         ),
         SizedBox(
@@ -437,10 +341,110 @@ class RegisterPageState extends State<RegisterPage> {
             return null;
           },
           onSaved: (String inValue) {
-            registerForm.password = inValue;
+            registerData.password = inValue;
           },
         ),
       ],
+    );
+  }
+
+  Widget mySwitchDependents() {
+    return Switch(
+      activeColor: Colors.greenAccent.shade700,
+      value: registerData.switchDependents,
+      onChanged: (bool inValue) {
+        setState(() {
+          registerData.switchDependents = inValue;
+        });
+      },
+    );
+  }
+
+  Widget mySwitchCreditCard() {
+    return Switch(
+      activeColor: Colors.greenAccent.shade700,
+      value: registerData.switchCreditCard,
+      onChanged: (bool inValue) {
+        setState(() {
+          registerData.switchCreditCard = inValue;
+        });
+      },
+    );
+  }
+
+  Widget mySlider() {
+    return Slider(
+      activeColor: Colors.greenAccent.shade700,
+      divisions: 100,
+      value: registerData.sliderValue,
+      onChanged: (double inValue) {
+        setState(() {
+          registerData.sliderValue = inValue;
+        });
+      },
+      min: 0,
+      max: 100,
+    );
+  }
+
+  Widget myRadio(int value) {
+    return Radio(
+      activeColor: Colors.greenAccent.shade700,
+      value: value,
+      groupValue: registerData.radioValue,
+      onChanged: (int inValue) {
+        setState(() {
+          registerData.radioValue = inValue;
+        });
+      },
+    );
+  }
+
+  Widget myCheckboxCasa() {
+    return Checkbox(
+      activeColor: Colors.greenAccent.shade700,
+      value: registerData.checkBoxCasa,
+      onChanged: (bool value) {
+        setState(() {
+          registerData.checkBoxCasa = value;
+        });
+      },
+    );
+  }
+
+  Widget myCheckboxCarro() {
+    return Checkbox(
+      activeColor: Colors.greenAccent.shade700,
+      value: registerData.checkBoxCarro,
+      onChanged: (bool value) {
+        setState(() {
+          registerData.checkBoxCarro = value;
+        });
+      },
+    );
+  }
+
+  Widget myCheckboxMoto() {
+    return Checkbox(
+      activeColor: Colors.greenAccent.shade700,
+      value: registerData.checkBoxMoto,
+      onChanged: (bool value) {
+        setState(() {
+          registerData.checkBoxMoto = value;
+        });
+      },
+    );
+  }
+
+  Widget myCheckboxBicicleta() {
+    return Checkbox(
+      activeColor: Colors.greenAccent.shade700,
+      value: registerData.checkBoxBicicleta,
+      onChanged: (bool value) {
+        setState(() {
+          registerData.checkBoxBicicleta = value;
+        });
+      },
     );
   }
 
@@ -452,15 +456,17 @@ class RegisterPageState extends State<RegisterPage> {
         onPressed: () async {
           if (formKey.currentState.validate()) {
             await showDialog(
-                context: formKey.currentContext,
-                builder: (_) => generateConfirmationDialog(),
-                barrierDismissible: false);
-            if (formKey.currentState.validate()) {
-              formKey.currentState.save();
-              registerForm.doSomething();
-              registerForm.confirmed = false;
-              //Navigator.pop(context);
-            }
+              context: formKey.currentContext,
+              builder: (_) => generateConfirmationDialog(),
+              barrierDismissible: false,
+              useRootNavigator: false,
+            );
+            // if (formKey.currentState.validate()) {
+            //   formKey.currentState.save();
+            //   registerData.doSomething();
+            //   registerData.confirmed = false;
+            //   //Navigator.pop(context);
+            // }
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -480,7 +486,10 @@ class RegisterPageState extends State<RegisterPage> {
         child: Text(
           "CADASTRAR",
           style: TextStyle(
-              fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+            fontSize: 16,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
           textAlign: TextAlign.center,
         ),
         style: ElevatedButton.styleFrom(
@@ -497,32 +506,37 @@ class RegisterPageState extends State<RegisterPage> {
   Widget generateConfirmationDialog() {
     return AlertDialog(
       title: Text(
-        "Confirme para prosseguir",
-        style: TextStyle(color: Colors.black87),
+        "Finalizar cadastro",
       ),
       content: Text(
-          "Você tem certeza de que gostaria de enviar seus dados para o cadastro?",
-          style: TextStyle(color: Colors.black87)),
+        "Realmente deseja realizar seu cadastro?",
+      ),
       actions: [
-        TextButton(
+        ElevatedButton(
+          onPressed: () {
+            registerData.confirmed = true;
+            formKey.currentState.save();
+            Navigator.of(context).pop();
+            BlocProvider.of<AuthBloc>(context).add(registerData);
+          },
           child: Text("Sim"),
-          onPressed: () {
-            registerForm.confirmed = true;
-            Navigator.of(formKey.currentContext).pop();
-          },
+          style: ElevatedButton.styleFrom(
+            primary: Colors.greenAccent.shade400,
+          ),
         ),
-        TextButton(
-          child: Text("Não"),
+        ElevatedButton(
           onPressed: () {
-            registerForm.confirmed = false;
-            Navigator.of(formKey.currentContext).pop();
+            registerData.confirmed = false;
+            Navigator.of(context).pop();
           },
+          child: Text("Não"),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.redAccent.shade400,
+          ),
         ),
       ],
-      backgroundColor: Colors.grey.shade100,
-      elevation: 20,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(5),
       ),
     );
   }
@@ -539,7 +553,7 @@ class RegisterPageState extends State<RegisterPage> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, '/');
             },
             child: Text(
               "Entrar!",
