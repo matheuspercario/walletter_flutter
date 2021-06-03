@@ -11,6 +11,11 @@ class FirebaseAuthenticationService {
         );
   }
 
+  // GET CURRENT USER INFO
+  Future getCurrentUser() async {
+    return await _firebaseAuth.currentUser;
+  }
+
   UserModel _userFromFirebaseUser(User user) {
     return user != null ? UserModel(user.uid) : null;
   }
