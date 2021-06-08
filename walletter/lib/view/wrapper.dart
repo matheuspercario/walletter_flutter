@@ -4,8 +4,8 @@ import 'package:walletter/logic/manage_auth/auth_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_state.dart';
 import 'package:walletter/view/auth/login.dart';
 import 'package:walletter/view/auth/register.dart';
-import 'package:walletter/view/my_app/TransactionsSreen/add_expense_screen.dart';
-import 'package:walletter/view/my_app/TransactionsSreen/add_income_screen.dart';
+import 'package:walletter/view/my_app/transactions/add_expense_screen.dart';
+import 'package:walletter/view/my_app/transactions/add_income_screen.dart';
 import 'package:walletter/view/my_app/bottom_navigation.dart';
 
 class Wrapper extends StatelessWidget {
@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.white,
       ),
       routes: {
-        '/': (context) => MyBottomNavigationBar(),
+        '/': (context) => BottomNavigation(),
         '/add_income': (context) => AddIncome(),
         '/add_expense': (context) => AddExpense(),
       },

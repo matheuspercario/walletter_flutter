@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:walletter/view/my_app/transaction_list.dart';
+import 'package:walletter/view/my_app/transactions/transaction_list.dart';
 import 'package:walletter/view/my_app/user.dart';
 
 import 'home.dart';
 
-class MyBottomNavigationBar extends StatefulWidget {
+class BottomNavigation extends StatefulWidget {
   @override
-  _MyBottomNavigationBarState createState() => _MyBottomNavigationBarState();
+  _BottomNavigationState createState() => _BottomNavigationState();
 }
 
-class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
+class _BottomNavigationState extends State<BottomNavigation> {
   int _currentIndex = 1;
   List<Widget> _pages = [
     TransactionsList(),
