@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_event.dart';
-import 'package:walletter/view/auth/register.dart';
 
 class LoginPage extends StatelessWidget {
   final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
@@ -48,7 +47,7 @@ class LoginPage extends StatelessWidget {
                 key: formKey,
                 child: Column(
                   children: <Widget>[
-                    usernameTextField(),
+                    emailTextField(),
                     SizedBox(
                       height: 16,
                     ),
@@ -189,7 +188,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget usernameTextField() {
+  Widget emailTextField() {
     return TextFormField(
       style: TextStyle(fontSize: 18, color: Colors.black87),
       keyboardType: TextInputType.emailAddress,
@@ -232,7 +231,7 @@ class LoginPage extends StatelessWidget {
         return null;
       },
       onSaved: (String inValue) {
-        loginData.username = inValue;
+        loginData.email = inValue;
       },
     );
   }

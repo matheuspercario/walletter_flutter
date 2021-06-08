@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_event.dart';
-import 'package:walletter/view/auth/login.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -293,7 +292,7 @@ class RegisterPageState extends State<RegisterPage> {
             return null;
           },
           onSaved: (String inValue) {
-            registerData.username = inValue;
+            registerData.email = inValue;
           },
         ),
         SizedBox(

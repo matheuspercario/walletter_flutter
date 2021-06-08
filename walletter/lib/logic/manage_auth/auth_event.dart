@@ -5,7 +5,7 @@ abstract class AuthEvent {}
 class RegisterUser extends AuthEvent {
   String fullName;
 
-  String username;
+  String email;
   String password;
 
   var switchDependents = false;
@@ -20,7 +20,7 @@ class RegisterUser extends AuthEvent {
 }
 
 class LoginUser extends AuthEvent {
-  String username;
+  String email;
   String password;
 }
 

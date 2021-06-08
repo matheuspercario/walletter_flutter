@@ -26,12 +26,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         yield Unauthenticated();
       } else if (event is RegisterUser) {
         await _authenticationService.createUserWithEmailAndPassword(
-          email: event.username,
+          fullName: event.fullName,
+          email: event.email,
           password: event.password,
+          dependents: event.switchDependents,
+          creditCard: event.switchCreditCard,
+          idade: event.sliderValue,
+          rendaMensal: event.radioValue,
+          has_Casa: event.checkBoxCasa,
+          has_Carro: event.checkBoxCarro,
+          has_Moto: event.checkBoxMoto,
+          has_Bicicleta: event.checkBoxBicicleta,
         );
       } else if (event is LoginUser) {
         await _authenticationService.signInWithEmailAndPassword(
-          email: event.username,
+          email: event.email,
           password: event.password,
         );
       } else if (event is InnerServerEvent) {

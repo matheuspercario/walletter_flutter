@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:walletter/data/firestore_database.dart';
 import 'package:walletter/model/user.dart';
 
 class FirebaseAuthenticationService {
@@ -9,11 +10,6 @@ class FirebaseAuthenticationService {
     return _firebaseAuth.authStateChanges().map(
           (User user) => _userFromFirebaseUser(user),
         );
-  }
-
-  // GET CURRENT USER INFO
-  Future getCurrentUser() async {
-    return await _firebaseAuth.currentUser;
   }
 
   UserModel _userFromFirebaseUser(User user) {
@@ -29,13 +25,41 @@ class FirebaseAuthenticationService {
     return UserModel(user.uid);
   }
 
-  createUserWithEmailAndPassword({String email, String password}) async {
+  createUserWithEmailAndPassword({
+    String fullName,
+    String email,
+    String password,
+    var dependents,
+    var creditCard,
+    var idade,
+    var rendaMensal,
+    var has_Casa,
+    var has_Carro,
+    var has_Moto,
+    var has_Bicicleta,
+  }) async {
     UserCredential authResult =
         await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
     User user = authResult.user;
+
+    // Invocar Firestore para inserir informacoes a mais...
+    FirestoreRemoteServer.helper.includeUserData(
+      user.uid,
+      fullName,
+      email,
+      dependents,
+      creditCard,
+      idade,
+      rendaMensal,
+      has_Casa,
+      has_Carro,
+      has_Moto,
+      has_Bicicleta,
+    );
+
     return UserModel(user.uid);
   }
 

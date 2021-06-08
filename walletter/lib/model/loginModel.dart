@@ -1,11 +1,10 @@
 class LoginForm {
-  String username;
+  String email;
   String password;
   bool confirmed = false;
 
   doSomething() {
-    print("Username: $username");
+    print("Username: $email");
     print("Password: $password");
-    
   }
 }

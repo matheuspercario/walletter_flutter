@@ -14,13 +14,32 @@ class FirestoreRemoteServer {
       FirebaseFirestore.instance.collection("transactions");
 
   /// Metodo inserir dados usuario
-  // includeUserData(String uid, String email, int idade, int ra) async {
-  //   await transactionCollection.doc(uid).set({
-  //     "email": email,
-  //     "idade": idade,
-  //     "ra": ra,
-  //   });
-  // }
+  includeUserData(
+    String uid,
+    String fullName,
+    String email,
+    var dependents,
+    var creditCard,
+    var idade,
+    var rendaMensal,
+    var has_Casa,
+    var has_Carro,
+    var has_Moto,
+    var has_Bicicleta,
+  ) async {
+    await transactionCollection.doc(uid).set({
+      "fullName": fullName,
+      "email": email,
+      "idade": idade,
+      "rendaMensal": rendaMensal,
+      "dependents": dependents,
+      "creditCard": creditCard,
+      "has_Casa": has_Casa,
+      "has_Carro": has_Carro,
+      "has_Moto": has_Moto,
+      "has_Bicicleta": has_Bicicleta,
+    });
+  }
 
   // Mapeia os snapshots (documents) em um map
   List _transactionListFromSnapshot(QuerySnapshot snapshots) {
