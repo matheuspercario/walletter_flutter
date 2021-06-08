@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:walletter/logic/manage_db/manage_db_event.dart';
-import 'package:walletter/logic/manage_db/manage_remote_db_bloc.dart';
+import 'package:walletter/logic/manage_db/manage_firestore_db_bloc.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
-import 'package:walletter/logic/monitor_db/monitor_remote_db_bloc.dart';
+import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
 
-class TransactionsListView extends StatefulWidget {
+class TransactionsList extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _TransactionsListViewState();
+    return _TransactionsListState();
   }
 }
 
-class _TransactionsListViewState extends State<TransactionsListView> {
+class _TransactionsListState extends State<TransactionsList> {
   final Map translateCategory = {
     'expense': 0,
     'income': 1,
@@ -108,7 +108,7 @@ class _TransactionsListViewState extends State<TransactionsListView> {
         TextButton(
           child: Text("Sim"),
           onPressed: () {
-            BlocProvider.of<ManageRemoteBloc>(context).add(
+            BlocProvider.of<ManageFirestoreBloc>(context).add(
               DeleteEvent(
                 transactionId: idList[position],
               ),

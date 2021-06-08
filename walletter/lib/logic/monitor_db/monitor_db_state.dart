@@ -2,6 +2,6 @@ import 'package:walletter/model/transactionModel.dart';
 
 class MonitorState {
   List<TransactionForm> transactionList;
-  List<int> idList;
+  List<dynamic> idList;
   MonitorState({this.transactionList, this.idList});
 }

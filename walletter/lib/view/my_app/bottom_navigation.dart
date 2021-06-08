@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:walletter/view/my_app_screen/transaction_listview_screen.dart';
-import 'package:walletter/view/my_app_screen/user_screen.dart';
+import 'package:walletter/view/my_app/transaction_list.dart';
+import 'package:walletter/view/my_app/user.dart';
 
-import 'home_screen.dart';
-
+import 'home.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
   @override
@@ -13,7 +12,7 @@ class MyBottomNavigationBar extends StatefulWidget {
 class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   int _currentIndex = 1;
   List<Widget> _pages = [
-    TransactionsListView(),
+    TransactionsList(),
     HomeScreen(),
     UserScreen(),
   ];

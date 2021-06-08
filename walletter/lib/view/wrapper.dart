@@ -4,9 +4,9 @@ import 'package:walletter/logic/manage_auth/auth_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_state.dart';
 import 'package:walletter/view/auth/login.dart';
 import 'package:walletter/view/auth/register.dart';
-import 'package:walletter/view/my_app_screen/TransactionsSreen/add_expense_screen.dart';
-import 'package:walletter/view/my_app_screen/TransactionsSreen/add_income_screen.dart';
-import 'package:walletter/view/my_app_screen/my_app_screen.dart';
+import 'package:walletter/view/my_app/TransactionsSreen/add_expense_screen.dart';
+import 'package:walletter/view/my_app/TransactionsSreen/add_income_screen.dart';
+import 'package:walletter/view/my_app/bottom_navigation.dart';
 
 class Wrapper extends StatelessWidget {
   @override

@@ -4,7 +4,7 @@ import 'package:walletter/logic/manage_db/manage_db_event.dart';
 import 'package:walletter/logic/manage_db/manage_db_state.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:intl/intl.dart';
-import 'package:walletter/logic/manage_db/manage_remote_db_bloc.dart';
+import 'package:walletter/logic/manage_db/manage_firestore_db_bloc.dart';
 import 'package:walletter/model/transactionModel.dart';
 
 class AddExpense extends StatefulWidget {
@@ -20,7 +20,7 @@ class _AddExpenseState extends State<AddExpense> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ManageRemoteBloc(),
+      create: (_) => ManageFirestoreBloc(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -48,7 +48,7 @@ class _AddExpenseState extends State<AddExpense> {
   }
 
   Widget myIncomeForm() {
-    return BlocBuilder<ManageRemoteBloc, ManageState>(
+    return BlocBuilder<ManageFirestoreBloc, ManageState>(
         builder: (context, state) {
       TransactionForm expenseForm;
       expenseForm = new TransactionForm();
@@ -186,7 +186,7 @@ class _AddExpenseState extends State<AddExpense> {
           formKeyIncome.currentState.save();
           expenseForm.category = "expense";
           expenseForm.doSomething();
-          BlocProvider.of<ManageRemoteBloc>(context)
+          BlocProvider.of<ManageFirestoreBloc>(context)
               .add(SubmitEvent(transaction: expenseForm));
           Navigator.pop(context);
           // Navigator.pushReplacementNamed(context, '/homepage');

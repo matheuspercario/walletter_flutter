@@ -6,6 +6,6 @@ class AskNewList extends MonitorEvent {}
 
 class UpdateList extends MonitorEvent {
   List<TransactionForm> transactionList;
-  List<int> idList;
+  List<dynamic> idList;
   UpdateList({this.transactionList, this.idList});
 }
