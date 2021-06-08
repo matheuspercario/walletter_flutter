@@ -1,42 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:walletter/model/addTransactionModel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/logic/manage_db/manage_db_event.dart';
+import 'package:walletter/logic/manage_db/manage_db_state.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:intl/intl.dart';
+import 'package:walletter/logic/manage_db/manage_remote_db_bloc.dart';
+import 'package:walletter/model/transactionModel.dart';
 
 class AddIncome extends StatefulWidget {
-  AddIncome({Key key}) : super(key: key);
-
   @override
   _AddIncomeState createState() => _AddIncomeState();
 }
 
 class _AddIncomeState extends State<AddIncome> {
   final GlobalKey<FormState> formKeyIncome = new GlobalKey<FormState>();
-  final AddIncomeForm incomeForm = new AddIncomeForm();
 
   DateTime _dateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Nova Receita',
+    return BlocProvider(
+      create: (_) => ManageRemoteBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Nova Receita',
+          ),
+          backgroundColor: Colors.greenAccent.shade700,
         ),
-        backgroundColor: Colors.greenAccent.shade700,
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 50, left: 50),
-                child: myIncomeForm(),
-              )
-            ],
+        body: SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 50, left: 50),
+                  child: myIncomeForm(),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -44,35 +48,41 @@ class _AddIncomeState extends State<AddIncome> {
   }
 
   Widget myIncomeForm() {
-    return Form(
-      key: formKeyIncome,
-      child: Column(
-        children: [
-          SizedBox(
-            height: 120,
-          ),
-          valueInputForm(),
-          SizedBox(
-            height: 70,
-          ),
-          valueDateForm(),
-          SizedBox(
-            height: 20,
-          ),
-          valueDescriptionForm(),
-          SizedBox(
-            height: 100,
-          ),
-          submitInformations(),
-          SizedBox(
-            height: 50,
-          ),
-        ],
-      ),
-    );
+    return BlocBuilder<ManageRemoteBloc, ManageState>(
+        builder: (context, state) {
+      TransactionForm incomeForm;
+      incomeForm = new TransactionForm();
+
+      return Form(
+        key: formKeyIncome,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 120,
+            ),
+            valueInputForm(incomeForm),
+            SizedBox(
+              height: 70,
+            ),
+            valueDateForm(incomeForm),
+            SizedBox(
+              height: 20,
+            ),
+            valueDescriptionForm(incomeForm),
+            SizedBox(
+              height: 100,
+            ),
+            submitInformations(incomeForm, context),
+            SizedBox(
+              height: 50,
+            ),
+          ],
+        ),
+      );
+    });
   }
 
-  Widget valueDateForm() {
+  Widget valueDateForm(TransactionForm incomeForm) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: DateFormat("dd/MM/yyyy").format(_dateTime).toString(),
@@ -80,14 +90,15 @@ class _AddIncomeState extends State<AddIncome> {
       ),
       onTap: () async {
         FocusScope.of(context).requestFocus(new FocusNode());
-        final DateTime picked = await showDatePicker(
+        await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime.now().add(const Duration(days: 100)),
-        ).then((picked) {
+          // ignore: missing_return
+        ).then((picked) async {
           if (picked == null) {
-            print("Don't piked any date...");
+            print("Don't picked any date...");
           } else {
             setState(() {
               _dateTime = picked;
@@ -96,12 +107,13 @@ class _AddIncomeState extends State<AddIncome> {
         });
       },
       onSaved: (_) {
-        incomeForm.date = _dateTime;
+        incomeForm.date =
+            DateFormat("dd/MM/yyyy hh:mm").format(_dateTime).toString();
       },
     );
   }
 
-  Widget valueDescriptionForm() {
+  Widget valueDescriptionForm(TransactionForm incomeForm) {
     return TextFormField(
       keyboardType: TextInputType.multiline,
       maxLines: null,
@@ -124,7 +136,7 @@ class _AddIncomeState extends State<AddIncome> {
     );
   }
 
-  Widget valueInputForm() {
+  Widget valueInputForm(TransactionForm incomeForm) {
     return TextFormField(
       style: TextStyle(fontSize: 32),
       inputFormatters: [
@@ -154,16 +166,8 @@ class _AddIncomeState extends State<AddIncome> {
     );
   }
 
-  Widget submitInformations() {
+  Widget submitInformations(TransactionForm incomeForm, context) {
     return ElevatedButton(
-      onPressed: () {
-        if (formKeyIncome.currentState.validate()) {
-          formKeyIncome.currentState.save();
-          incomeForm.doSomething();
-          // Navigator.pushReplacementNamed(context, '/homepage');
-          Navigator.pop(context);
-        }
-      },
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Icon(
@@ -177,6 +181,17 @@ class _AddIncomeState extends State<AddIncome> {
         primary: Colors.greenAccent.shade400,
         shape: CircleBorder(),
       ),
+      onPressed: () {
+        if (formKeyIncome.currentState.validate()) {
+          formKeyIncome.currentState.save();
+          incomeForm.category = "income";
+          incomeForm.doSomething();
+          BlocProvider.of<ManageRemoteBloc>(context)
+              .add(SubmitEvent(transaction: incomeForm));
+          Navigator.pop(context);
+          // Navigator.pushReplacementNamed(context, '/homepage');
+        }
+      },
     );
   }
 }
