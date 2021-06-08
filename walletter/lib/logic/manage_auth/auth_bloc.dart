@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:walletter/auth_provider/firebase_auth.dart';
+import 'package:walletter/data/firestore_database.dart';
 import 'package:walletter/logic/manage_auth/auth_event.dart';
 import 'package:walletter/logic/manage_auth/auth_state.dart';
 import 'package:walletter/model/user.dart';
@@ -47,6 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (event.userModel == null) {
           yield Unauthenticated();
         } else {
+          FirestoreRemoteServer.uid = event.userModel.uid;
           yield Authenticated(user: event.userModel);
         }
       } else if (event is Logout) {

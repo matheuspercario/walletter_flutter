@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:walletter/data/firestore_database.dart';
-
 import 'package:walletter/logic/monitor_db/monitor_db_event.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
 import 'package:walletter/model/transactionModel.dart';
@@ -10,7 +9,7 @@ class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
   StreamSubscription _firestoreSubscription;
 
   List<TransactionForm> firestoreTransactionList;
-  List<int> firestoreIdList;
+  List<String> firestoreIdList;
 
   MonitorBloc() : super(MonitorState(transactionList: [], idList: [])) {
     add(AskNewList());
@@ -34,12 +33,12 @@ class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
   Stream<MonitorState> mapEventToState(MonitorEvent event) async* {
     if (event is AskNewList) {
       // Ir ao Firebase pedir novos dados
-      var remoteResponse =
+      var firestoreResponse =
           await FirestoreRemoteServer.helper.getTransactionList();
 
       // response remote
-      firestoreTransactionList = remoteResponse[0];
-      firestoreIdList = remoteResponse[1];
+      firestoreTransactionList = firestoreResponse[0];
+      firestoreIdList = firestoreResponse[1];
 
       yield MonitorState(
         transactionList: firestoreTransactionList,

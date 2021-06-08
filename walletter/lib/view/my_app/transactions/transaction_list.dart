@@ -31,11 +31,11 @@ class _TransactionsListState extends State<TransactionsList> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MonitorBloc, MonitorState>(builder: (context, state) {
-      return getTransactionListView(state.transactionList, state.idList);
+      return getTransactionList(state.transactionList, state.idList);
     });
   }
 
-  Widget getTransactionListView(transactionList, idList) {
+  Widget getTransactionList(transactionList, idList) {
     return ListView.builder(
         itemCount: transactionList.length,
         itemBuilder: (context, position) {
