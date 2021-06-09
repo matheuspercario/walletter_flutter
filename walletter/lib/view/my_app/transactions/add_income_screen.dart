@@ -93,8 +93,8 @@ class _AddIncomeState extends State<AddIncome> {
         await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
-          lastDate: DateTime.now().add(const Duration(days: 100)),
+          firstDate: DateTime(2015),
+          lastDate: DateTime.now().add(const Duration(days: 1000)),
           // ignore: missing_return
         ).then((picked) async {
           if (picked == null) {
@@ -108,7 +108,7 @@ class _AddIncomeState extends State<AddIncome> {
       },
       onSaved: (_) {
         incomeForm.date =
-            DateFormat("dd/MM/yyyy hh:mm").format(_dateTime).toString();
+            DateFormat("dd/MM/yyyy").format(_dateTime).toString();
       },
     );
   }
@@ -131,7 +131,7 @@ class _AddIncomeState extends State<AddIncome> {
         return null;
       },
       onSaved: (String inValue) {
-        incomeForm.description = inValue;
+        incomeForm.description = inValue.trim();
       },
     );
   }
@@ -160,8 +160,8 @@ class _AddIncomeState extends State<AddIncome> {
         }
         return null;
       },
-      onSaved: (String inValue) {
-        incomeForm.value = inValue;
+      onSaved: (var inValue) {
+        incomeForm.value = inValue.split(" ")[1];
       },
     );
   }
@@ -189,7 +189,6 @@ class _AddIncomeState extends State<AddIncome> {
           BlocProvider.of<ManageFirestoreBloc>(context)
               .add(SubmitEvent(transaction: incomeForm));
           Navigator.pop(context);
-          // Navigator.pushReplacementNamed(context, '/homepage');
         }
       },
     );

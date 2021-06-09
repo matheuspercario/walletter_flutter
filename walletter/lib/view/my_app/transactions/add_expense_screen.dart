@@ -108,7 +108,7 @@ class _AddExpenseState extends State<AddExpense> {
       },
       onSaved: (_) {
         expenseForm.date =
-            DateFormat("dd/MM/yyyy hh:mm").format(_dateTime).toString();
+            DateFormat("dd/MM/yyyy").format(_dateTime).toString();
       },
     );
   }
@@ -131,7 +131,7 @@ class _AddExpenseState extends State<AddExpense> {
         return null;
       },
       onSaved: (String inValue) {
-        expenseForm.description = inValue;
+        expenseForm.description = inValue.trim();
       },
     );
   }
@@ -154,14 +154,14 @@ class _AddExpenseState extends State<AddExpense> {
           color: Colors.redAccent.shade700,
         ),
       ),
-      validator: (String inValue) {
+      validator: (var inValue) {
         if (inValue.isEmpty) {
           return "Insira um valor";
         }
         return null;
       },
-      onSaved: (String inValue) {
-        expenseForm.value = inValue;
+      onSaved: (var inValue) {
+        expenseForm.value = inValue.split(" ")[1];
       },
     );
   }

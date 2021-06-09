@@ -85,7 +85,7 @@ class _TransactionsListState extends State<TransactionsList> {
           color: colors[translateCategory[transactionList[position].category]],
         ),
         trailing: Text(
-          transactionList[position].value,
+          "R\$ ${transactionList[position].value}",
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

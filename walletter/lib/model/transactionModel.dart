@@ -1,8 +1,8 @@
 class TransactionForm {
-  String _value;
-  String _date;
-  String _description;
-  String _category;
+  var _value;
+  var _date;
+  var _description;
+  var _category;
 
   TransactionForm() {
     _value = "";
@@ -18,30 +18,30 @@ class TransactionForm {
     this._category = map["category"];
   }
 
-  String get value => _value;
-  String get date => _date;
-  String get description => _description;
-  String get category => _category;
+  dynamic get value => _value;
+  dynamic get date => _date;
+  dynamic get description => _description;
+  dynamic get category => _category;
 
-  set value(String newValue) {
+  set value(var newValue) {
     if (newValue.length > 0) {
       this._value = newValue;
     }
   }
 
-  set date(String newDate) {
+  set date(var newDate) {
     if (newDate.length > 0) {
       this._date = newDate;
     }
   }
 
-  set description(String newDescription) {
+  set description(var newDescription) {
     if (newDescription.length > 0) {
       this._description = newDescription;
     }
   }
 
-  set category(String newCategory) {
+  set category(var newCategory) {
     if (newCategory.length > 0) {
       this._category = newCategory;
     }
