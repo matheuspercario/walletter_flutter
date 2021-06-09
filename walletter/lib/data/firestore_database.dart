@@ -5,7 +5,7 @@ class FirestoreRemoteServer {
   static String uid;
 
   ///
-  ///Criando Singlton
+  /// Criando Singlton
   ///
   static FirestoreRemoteServer helper = FirestoreRemoteServer._createInstance();
   FirestoreRemoteServer._createInstance();
@@ -43,12 +43,6 @@ class FirestoreRemoteServer {
     });
   }
 
-  //
-  // getUserData() async {
-  //   var resultados = await db.collection("transactions").doc(uid).get();
-  //   print(resultados.data());
-  // }
-
   // Mapeia os snapshots (documents) em um map
   List _transactionListFromSnapshot(QuerySnapshot snapshots) {
     List<TransactionForm> transactionList = [];
@@ -56,7 +50,6 @@ class FirestoreRemoteServer {
 
     for (var doc in snapshots.docs) {
       TransactionForm transaction = TransactionForm.fromMap(doc.data());
-      //transaction.dataLocation = 3;
       transactionList.add(transaction);
       idList.add(doc.id);
     }
