@@ -189,7 +189,6 @@ class _AddExpenseState extends State<AddExpense> {
           BlocProvider.of<ManageFirestoreBloc>(context)
               .add(SubmitEvent(transaction: expenseForm));
           Navigator.pop(context);
-          // Navigator.pushReplacementNamed(context, '/homepage');
         }
       },
     );

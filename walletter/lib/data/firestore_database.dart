@@ -13,7 +13,9 @@ class FirestoreRemoteServer {
   final CollectionReference transactionCollection =
       FirebaseFirestore.instance.collection("transactions");
 
-  /// Metodo inserir dados usuario
+  final db = FirebaseFirestore.instance;
+
+  /// Metodos dados usuario
   includeUserData(
     String uid,
     String fullName,
@@ -40,6 +42,12 @@ class FirestoreRemoteServer {
       "has_Bicicleta": has_Bicicleta,
     });
   }
+
+  //
+  // getUserData() async {
+  //   var resultados = await db.collection("transactions").doc(uid).get();
+  //   print(resultados.data());
+  // }
 
   // Mapeia os snapshots (documents) em um map
   List _transactionListFromSnapshot(QuerySnapshot snapshots) {

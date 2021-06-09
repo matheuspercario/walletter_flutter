@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_event.dart';
+import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
+import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
 
 class UserScreen extends StatelessWidget {
   @override
@@ -152,10 +154,17 @@ class UserScreen extends StatelessWidget {
           "User: ",
           style: TextStyle(fontSize: 16),
         ),
-        Text(
-          "Matheus Bruder",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        )
+        BlocBuilder<MonitorBloc, MonitorState>(
+          builder: (context, state) {
+            return Text(
+              "Teste",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
+        ),
       ],
     );
   }
