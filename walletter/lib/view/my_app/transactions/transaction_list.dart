@@ -54,6 +54,7 @@ class _TransactionsListState extends State<TransactionsList> {
                     position,
                   ),
                   barrierDismissible: false,
+                  useRootNavigator: false,
                 );
                 //return true;
               },
@@ -100,33 +101,37 @@ class _TransactionsListState extends State<TransactionsList> {
     return AlertDialog(
       title: Text(
         "Confirme para prosseguir",
-        style: TextStyle(color: Colors.black87),
       ),
-      content: Text("Você tem certeza de que deseja apagar a transação?",
-          style: TextStyle(color: Colors.black87)),
+      content: Text(
+        "Você tem certeza de que deseja apagar a transação?",
+      ),
       actions: [
         TextButton(
-          child: Text("Sim"),
+          child: Text("Sim", style: TextStyle(color: Colors.white)),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.greenAccent.shade400,
+          ),
           onPressed: () {
+            Navigator.of(context).pop();
             BlocProvider.of<ManageFirestoreBloc>(context).add(
               DeleteEvent(
                 transactionId: idList[position],
               ),
             );
-            Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text("Não"),
+          child: Text("Não", style: TextStyle(color: Colors.white)),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.redAccent.shade400,
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
       ],
-      backgroundColor: Colors.grey.shade100,
-      elevation: 20,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(5),
       ),
     );
   }

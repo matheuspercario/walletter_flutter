@@ -510,7 +510,7 @@ class RegisterPageState extends State<RegisterPage> {
         "Realmente deseja realizar seu cadastro?",
       ),
       actions: [
-        ElevatedButton(
+        TextButton(
           onPressed: () {
             registerData.confirmed = true;
             formKey.currentState.save();
@@ -522,7 +522,7 @@ class RegisterPageState extends State<RegisterPage> {
             primary: Colors.greenAccent.shade400,
           ),
         ),
-        ElevatedButton(
+        TextButton(
           onPressed: () {
             registerData.confirmed = false;
             Navigator.of(context).pop();
