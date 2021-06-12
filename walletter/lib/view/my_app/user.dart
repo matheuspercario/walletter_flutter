@@ -157,7 +157,7 @@ class UserScreen extends StatelessWidget {
         BlocBuilder<MonitorBloc, MonitorState>(
           builder: (context, state) {
             return Text(
-              "Teste",
+              "oi",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

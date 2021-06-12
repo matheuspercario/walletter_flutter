@@ -4,10 +4,8 @@ abstract class AuthEvent {}
 
 class RegisterUser extends AuthEvent {
   String fullName;
-
   String email;
   String password;
-
   var switchDependents = false;
   var switchCreditCard = false;
   var sliderValue = 18.0;

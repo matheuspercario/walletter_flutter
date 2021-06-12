@@ -13,9 +13,14 @@ class FirestoreRemoteServer {
   final CollectionReference transactionCollection =
       FirebaseFirestore.instance.collection("transactions");
 
-  final db = FirebaseFirestore.instance;
-
   /// Metodos dados usuario
+
+  // getUserInformation() async {
+  //   DocumentSnapshot snapshot = await transactionCollection.doc(uid).get();
+  //   var infos = snapshot.data();
+  //   return infos;
+  // }
+
   includeUserData(
     String uid,
     String fullName,
@@ -41,6 +46,20 @@ class FirestoreRemoteServer {
       "has_Moto": has_Moto,
       "has_Bicicleta": has_Bicicleta,
     });
+  }
+
+  // GET INFORMATIONS LIST
+  getUserInformation() async {
+    List<dynamic> userInfos = [];
+    DocumentSnapshot snapshot = await transactionCollection.doc(uid).get();
+    var data = snapshot.data();
+
+    for (var item in data) {
+      userInfos.add(item);
+      print(item);
+    }
+
+    return userInfos;
   }
 
   // Mapeia os snapshots (documents) em um map

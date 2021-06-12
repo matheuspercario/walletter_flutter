@@ -13,7 +13,6 @@ class RegisterPage extends StatefulWidget {
 class RegisterPageState extends State<RegisterPage> {
   GlobalKey<FormState> formKey = new GlobalKey<FormState>();
   final RegisterUser registerData = new RegisterUser();
-  //RegisterForm registerForm = new RegisterForm();
 
   @override
   Widget build(BuildContext context) {
