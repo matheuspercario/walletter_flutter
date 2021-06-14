@@ -8,6 +8,7 @@ class FirestoreRemoteServer {
   /// Criando Singlton
   ///
   static FirestoreRemoteServer helper = FirestoreRemoteServer._createInstance();
+
   FirestoreRemoteServer._createInstance();
 
   final CollectionReference transactionCollection =
@@ -41,18 +42,26 @@ class FirestoreRemoteServer {
     });
   }
 
+  getCurrentMoney() async {
+    QuerySnapshot incomes = await transactionCollection
+        .doc(uid)
+        .collection("my_transactions")
+        .where('category' == 'income')
+        .get();
+  }
+
   // GET INFORMATIONS LIST
-  getUserInformation() async {
-    List<dynamic> userInfos = [];
-    DocumentSnapshot snapshot = await transactionCollection.doc(uid).get();
-    var data = snapshot.data();
+  Future<DocumentSnapshot> getUserInformation() async {
+    DocumentSnapshot document = await transactionCollection.doc(uid).get();
 
-    for (var item in data) {
-      userInfos.add(item);
-      print(item);
-    }
+    // var data = {
+    //   'fullName': document.get("fullName"),
+    //   'email': document.get("email"),
+    //   'idade': document.get("idade"),
+    // };
 
-    return userInfos;
+    // print(data);
+    return document;
   }
 
   // Mapeia os snapshots (documents) em um map

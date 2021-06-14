@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/data/firestore_database.dart';
 import 'package:walletter/logic/manage_auth/auth_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_event.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
@@ -156,12 +158,31 @@ class UserScreen extends StatelessWidget {
         ),
         BlocBuilder<MonitorBloc, MonitorState>(
           builder: (context, state) {
-            return Text(
-              "oi",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+            // CollectionReference transactionCollection = FirebaseFirestore.instance.collection('transactions');
+
+            return FutureBuilder<DocumentSnapshot>(
+              future: FirestoreRemoteServer.helper.getUserInformation(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  Map<String, dynamic> data =
+                      snapshot.data.data() as Map<String, dynamic>;
+                  return Text(
+                    "${data['fullName']}",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }
+                return Text(
+                  "Carregando...",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
             );
           },
         ),
