@@ -53,14 +53,6 @@ class FirestoreRemoteServer {
   // GET INFORMATIONS LIST
   Future<DocumentSnapshot> getUserInformation() async {
     DocumentSnapshot document = await transactionCollection.doc(uid).get();
-
-    // var data = {
-    //   'fullName': document.get("fullName"),
-    //   'email': document.get("email"),
-    //   'idade': document.get("idade"),
-    // };
-
-    // print(data);
     return document;
   }
 

@@ -10,38 +10,58 @@ import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
 class UserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            logoWalletter(),
-            Divider(
-              height: 70,
-              endIndent: 100,
-              indent: 100,
+    return BlocBuilder<MonitorBloc, MonitorState>(builder: (context, state) {
+      return FutureBuilder<DocumentSnapshot>(
+        future: FirestoreRemoteServer.helper.getUserInformation(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> userData =
+                snapshot.data.data() as Map<String, dynamic>;
+            return Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    logoWalletter(),
+                    Divider(
+                      height: 70,
+                      endIndent: 100,
+                      indent: 100,
+                    ),
+                    logoutButton(context),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    userName(userData),
+                    Divider(
+                      height: 70,
+                      endIndent: 100,
+                      indent: 100,
+                    ),
+                    userInformations(userData)
+                  ],
+                ),
+              ),
+            );
+          }
+          ;
+          return Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Center(
+              child: Text("Carregando..."),
             ),
-            logoutButton(context),
-            SizedBox(
-              height: 30,
-            ),
-            userName(),
-            Divider(
-              height: 70,
-              endIndent: 100,
-              indent: 100,
-            ),
-            userInformations()
-          ],
-        ),
-      ),
-    );
+          );
+        },
+      );
+    });
   }
 
-  Widget userInformations() {
+  Widget userInformations(Map<dynamic, dynamic> userData) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 40),
@@ -62,7 +82,7 @@ class UserScreen extends StatelessWidget {
                 "Nome: ",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text("Matheus Bruder"),
+              Text("${userData['fullName']}"),
             ],
           ),
           Row(
@@ -71,7 +91,7 @@ class UserScreen extends StatelessWidget {
                 "Idade: ",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text("22"),
+              Text("${userData['idade']}"),
             ],
           ),
           Row(
@@ -80,7 +100,7 @@ class UserScreen extends StatelessWidget {
                 "Email: ",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text("mpbruder@gmail.com"),
+              Text("${userData['email']}"),
             ],
           ),
           Row(
@@ -148,7 +168,7 @@ class UserScreen extends StatelessWidget {
     );
   }
 
-  Widget userName() {
+  Widget userName(Map<dynamic, dynamic> userData) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -156,35 +176,12 @@ class UserScreen extends StatelessWidget {
           "User: ",
           style: TextStyle(fontSize: 16),
         ),
-        BlocBuilder<MonitorBloc, MonitorState>(
-          builder: (context, state) {
-            // CollectionReference transactionCollection = FirebaseFirestore.instance.collection('transactions');
-
-            return FutureBuilder<DocumentSnapshot>(
-              future: FirestoreRemoteServer.helper.getUserInformation(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  Map<String, dynamic> data =
-                      snapshot.data.data() as Map<String, dynamic>;
-                  return Text(
-                    "${data['fullName']}",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  );
-                }
-                return Text(
-                  "Carregando...",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
-              },
-            );
-          },
+        Text(
+          "${userData['fullName']}",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );
