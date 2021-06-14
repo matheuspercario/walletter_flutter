@@ -14,13 +14,6 @@ class FirestoreRemoteServer {
       FirebaseFirestore.instance.collection("transactions");
 
   /// Metodos dados usuario
-
-  // getUserInformation() async {
-  //   DocumentSnapshot snapshot = await transactionCollection.doc(uid).get();
-  //   var infos = snapshot.data();
-  //   return infos;
-  // }
-
   includeUserData(
     String uid,
     String fullName,
@@ -66,9 +59,15 @@ class FirestoreRemoteServer {
   List _transactionListFromSnapshot(QuerySnapshot snapshots) {
     List<TransactionForm> transactionList = [];
     List<String> idList = [];
+    var total = 0.0;
 
     for (var doc in snapshots.docs) {
       TransactionForm transaction = TransactionForm.fromMap(doc.data());
+      if (transaction.category == "income") {
+        total += double.tryParse(transaction.value);
+      } else {
+        total -= double.tryParse(transaction.value);
+      }
       transactionList.add(transaction);
       idList.add(doc.id);
     }

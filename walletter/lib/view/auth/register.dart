@@ -517,7 +517,10 @@ class RegisterPageState extends State<RegisterPage> {
             Navigator.of(context).pop();
             BlocProvider.of<AuthBloc>(context).add(registerData);
           },
-          child: Text("Sim"),
+          child: Text(
+            "Sim",
+            style: TextStyle(color: Colors.white),
+          ),
           style: ElevatedButton.styleFrom(
             primary: Colors.greenAccent.shade400,
           ),
@@ -527,7 +530,10 @@ class RegisterPageState extends State<RegisterPage> {
             registerData.confirmed = false;
             Navigator.of(context).pop();
           },
-          child: Text("Não"),
+          child: Text(
+            "Não",
+            style: TextStyle(color: Colors.white),
+          ),
           style: ElevatedButton.styleFrom(
             primary: Colors.redAccent.shade400,
           ),

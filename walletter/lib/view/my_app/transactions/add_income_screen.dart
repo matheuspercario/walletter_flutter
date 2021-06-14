@@ -161,7 +161,7 @@ class _AddIncomeState extends State<AddIncome> {
         return null;
       },
       onSaved: (var inValue) {
-        incomeForm.value = inValue.split(" ")[1];
+        incomeForm.value = inValue.split(" ")[1].replaceAll(",", "");
       },
     );
   }

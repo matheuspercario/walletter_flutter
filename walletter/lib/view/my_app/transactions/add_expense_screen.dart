@@ -161,7 +161,7 @@ class _AddExpenseState extends State<AddExpense> {
         return null;
       },
       onSaved: (var inValue) {
-        expenseForm.value = inValue.split(" ")[1];
+        expenseForm.value = inValue.split(" ")[1].replaceAll(",", "");
       },
     );
   }
