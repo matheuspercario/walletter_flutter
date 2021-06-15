@@ -81,7 +81,7 @@ class _TransactionsListState extends State<TransactionsList> {
   Card listviewCard(transactionList, position, currencyFormatter) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
-      elevation: 7,
+      elevation: 3,
       child: ListTile(
         title: Text(transactionList[position].description),
         subtitle: Text(transactionList[position].date),
@@ -92,11 +92,12 @@ class _TransactionsListState extends State<TransactionsList> {
         trailing: Text(
           "R\$ ${currencyFormatter.format(double.tryParse(transactionList[position].value))}",
           style: TextStyle(
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: colors[
                   translateCategory[transactionList[position].category]]),
         ),
+        // onTap: ,
       ),
     );
   }

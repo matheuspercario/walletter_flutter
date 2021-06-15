@@ -74,8 +74,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 ),
               ),
               child: BottomNavigationBar(
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
                 currentIndex: _currentIndex,
-                backgroundColor: Colors.grey.shade900,
+                backgroundColor: Color.fromARGB(255, 40, 40, 40),
                 selectedItemColor: Colors.white,
                 onTap: (index) {
                   setState(() {
@@ -84,10 +86,18 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 },
                 items: [
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.list_sharp), label: 'Transações'),
+                      icon: Icon(
+                        Icons.library_books_rounded,
+                        size: 25,
+                      ),
+                      label: ''),
                   BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.person), label: 'Perfil')
+                      icon: Icon(
+                        Icons.person,
+                        size: 25,
+                      ),
+                      label: '')
                 ],
               ),
             ),
@@ -100,11 +110,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
           child: FloatingActionButton(
             backgroundColor: _currentIndex == 1
                 ? Colors.grey.shade300
-                : Colors.grey.shade900,
+                : Color.fromARGB(255, 40, 40, 40),
             child: Icon(Icons.home),
-            onPressed: () => setState(() {
-              _currentIndex = 1;
-            }),
+            onPressed: () => setState(
+              () {
+                _currentIndex = 1;
+              },
+            ),
           ),
         ),
       ),

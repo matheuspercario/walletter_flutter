@@ -33,10 +33,6 @@ class UserScreen extends StatelessWidget {
                         endIndent: 100,
                         indent: 100,
                       ),
-                      //logoutButton(context),
-                      // SizedBox(
-                      //   height: 30,
-                      // ),
                       userName(userData),
                       Divider(
                         height: 70,
@@ -73,58 +69,47 @@ class UserScreen extends StatelessWidget {
         //mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Informações",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 20,
-          ),
           Row(
             children: [
+              Icon(Icons.email_rounded),
+              SizedBox(width: 15),
               Text(
-                "Nome: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                "${userData['email']}",
+                style: TextStyle(fontSize: 18),
               ),
-              Text("${userData['fullName']}"),
             ],
           ),
+          SizedBox(height: 10),
           Row(
             children: [
+              Icon(Icons.calendar_today_rounded),
+              SizedBox(width: 15),
               Text(
-                "Idade: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                "${(userData['idade']).round()} anos",
+                style: TextStyle(fontSize: 18),
               ),
-              Text("${(userData['idade']).round()}"),
             ],
           ),
+          SizedBox(height: 10),
           Row(
             children: [
-              Text(
-                "Email: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text("${userData['email']}"),
+              Icon(Icons.credit_card_rounded),
+              SizedBox(width: 15),
+              if (userData['creditCard'])
+                Text("Possui crédito", style: TextStyle(fontSize: 18)),
+              if (!userData['creditCard'])
+                Text("Não possui crédito", style: TextStyle(fontSize: 18)),
             ],
           ),
+          SizedBox(height: 10),
           Row(
             children: [
-              Text(
-                "Dependentes: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              if (userData['dependents']) Text("Sim"),
-              if (!userData['dependents']) Text("Não"),
-            ],
-          ),
-          Row(
-            children: [
-              Text(
-                "Cartão de crédito: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              if (userData['creditCard']) Text("Sim"),
-              if (!userData['creditCard']) Text("Não"),
+              Icon(Icons.people_alt_rounded),
+              SizedBox(width: 15),
+              if (userData['dependents'])
+                Text("Possui dependentes", style: TextStyle(fontSize: 18)),
+              if (!userData['dependents'])
+                Text("Não possui dependentes", style: TextStyle(fontSize: 18)),
             ],
           ),
         ],
@@ -181,10 +166,51 @@ class UserScreen extends StatelessWidget {
         Text(
           "${userData['fullName']}",
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
+        SizedBox(height: 15),
+        if (userData['rendaMensal'] == 1)
+          Text(
+            "Menos que R\$ 1.000,00",
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        if (userData['rendaMensal'] == 2)
+          Text(
+            "R\$ 1.000,00 ~ R\$ 2.500,00",
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        if (userData['rendaMensal'] == 3)
+          Text(
+            "R\$ 2.500,00 ~ R\$ 5.000,00",
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        if (userData['rendaMensal'] == 4)
+          Text(
+            "R\$ 5.000,00 ~ R\$ 10.000,00",
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        if (userData['rendaMensal'] == 5)
+          Text(
+            "Mais que R\$ 10.000,00",
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
       ],
     );
   }

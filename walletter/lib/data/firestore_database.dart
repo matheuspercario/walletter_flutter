@@ -87,6 +87,7 @@ class FirestoreRemoteServer {
     QuerySnapshot snapshot = await transactionCollection
         .doc(uid)
         .collection("my_transactions")
+        .orderBy("date", descending: true)
         .get();
 
     // Invocar método auxilar
