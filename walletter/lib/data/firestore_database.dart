@@ -42,12 +42,24 @@ class FirestoreRemoteServer {
     });
   }
 
-  getCurrentMoney() async {
-    QuerySnapshot incomes = await transactionCollection
+  Future<double> getCurrentMoney() async {
+    QuerySnapshot snapshots = await transactionCollection
         .doc(uid)
         .collection("my_transactions")
-        .where('category' == 'income')
         .get();
+
+    double total = 0.0;
+
+    for (var doc in snapshots.docs) {
+      TransactionForm transaction = TransactionForm.fromMap(doc.data());
+
+      if (transaction.category == "income") {
+        total += double.tryParse(transaction.value);
+      } else {
+        total -= double.tryParse(transaction.value);
+      }
+    }
+    return total;
   }
 
   // GET INFORMATIONS LIST
@@ -60,18 +72,13 @@ class FirestoreRemoteServer {
   List _transactionListFromSnapshot(QuerySnapshot snapshots) {
     List<TransactionForm> transactionList = [];
     List<String> idList = [];
-    var total = 0.0;
 
     for (var doc in snapshots.docs) {
       TransactionForm transaction = TransactionForm.fromMap(doc.data());
-      if (transaction.category == "income") {
-        total += double.tryParse(transaction.value);
-      } else {
-        total -= double.tryParse(transaction.value);
-      }
       transactionList.add(transaction);
       idList.add(doc.id);
     }
+
     return [transactionList, idList];
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:walletter/logic/manage_db/manage_db_event.dart';
 import 'package:walletter/logic/manage_db/manage_firestore_db_bloc.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
@@ -30,12 +31,15 @@ class _TransactionsListState extends State<TransactionsList> {
 
   @override
   Widget build(BuildContext context) {
+    final currencyFormatter =
+        NumberFormat.currency(locale: 'pt_BR', customPattern: "#,##0.00");
     return BlocBuilder<MonitorBloc, MonitorState>(builder: (context, state) {
-      return getTransactionList(state.transactionList, state.idList);
+      return getTransactionList(
+          state.transactionList, state.idList, currencyFormatter);
     });
   }
 
-  Widget getTransactionList(transactionList, idList) {
+  Widget getTransactionList(transactionList, idList, currencyFormatter) {
     return ListView.builder(
         itemCount: transactionList.length,
         itemBuilder: (context, position) {
@@ -68,13 +72,13 @@ class _TransactionsListState extends State<TransactionsList> {
                 padding: EdgeInsets.only(left: 20.0),
                 margin: EdgeInsets.only(bottom: 5, top: 5),
               ),
-              child: listviewCard(transactionList, position),
+              child: listviewCard(transactionList, position, currencyFormatter),
             ),
           );
         });
   }
 
-  Card listviewCard(transactionList, position) {
+  Card listviewCard(transactionList, position, currencyFormatter) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       elevation: 7,
@@ -86,7 +90,7 @@ class _TransactionsListState extends State<TransactionsList> {
           color: colors[translateCategory[transactionList[position].category]],
         ),
         trailing: Text(
-          "R\$ ${transactionList[position].value}",
+          "R\$ ${currencyFormatter.format(double.tryParse(transactionList[position].value))}",
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

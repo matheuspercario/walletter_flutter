@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_event.dart';
 import 'package:walletter/logic/manage_db/manage_firestore_db_bloc.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
 import 'package:walletter/view/my_app/transactions/transaction_list.dart';
@@ -44,6 +46,16 @@ class _BottomNavigationState extends State<BottomNavigation> {
             style: TextStyle(fontSize: 20),
           ),
           backgroundColor: Colors.greenAccent.shade700,
+          actions: [
+            TextButton.icon(
+              style: TextButton.styleFrom(primary: Colors.white),
+              onPressed: () {
+                BlocProvider.of<AuthBloc>(context).add(Logout());
+              },
+              label: Text("Logout"),
+              icon: Icon(Icons.logout),
+            )
+          ],
         ),
         body: _pages[_currentIndex],
         bottomNavigationBar: BottomAppBar(

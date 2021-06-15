@@ -1,4 +1,9 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/data/firestore_database.dart';
+import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
+import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -127,12 +132,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       size: 40.0,
                     ),
                     Text("         "),
-                    Text(
-                      "500,00",
-                      style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold),
+                    BlocBuilder<MonitorBloc, MonitorState>(
+                      builder: (context, state) {
+                        return FutureBuilder<dynamic>(
+                          future:
+                              FirestoreRemoteServer.helper.getCurrentMoney(),
+                          builder: (context, double) {
+                            // Intl.defaultLocale = 'pt_BR';
+                            final currencyFormatter = NumberFormat.currency(
+                                locale: 'pt_BR', customPattern: "#,##0.00");
+                            if (double.connectionState ==
+                                ConnectionState.done) {
+                              return Text(
+                                "${currencyFormatter.format(double.data)}",
+                                style: TextStyle(
+                                    color: Colors.green,
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold),
+                              );
+                            } else {
+                              return CircularProgressIndicator(
+                                color: Colors.greenAccent.shade700,
+                              );
+                            }
+                          },
+                        );
+                      },
                     ),
                   ],
                 ),

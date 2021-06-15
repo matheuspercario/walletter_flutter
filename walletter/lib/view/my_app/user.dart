@@ -10,55 +10,59 @@ import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
 class UserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MonitorBloc, MonitorState>(builder: (context, state) {
-      return FutureBuilder<DocumentSnapshot>(
-        future: FirestoreRemoteServer.helper.getUserInformation(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> userData =
-                snapshot.data.data() as Map<String, dynamic>;
-            return Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    logoWalletter(),
-                    Divider(
-                      height: 70,
-                      endIndent: 100,
-                      indent: 100,
-                    ),
-                    logoutButton(context),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    userName(userData),
-                    Divider(
-                      height: 70,
-                      endIndent: 100,
-                      indent: 100,
-                    ),
-                    userInformations(userData)
-                  ],
+    return BlocBuilder<MonitorBloc, MonitorState>(
+      builder: (context, state) {
+        return FutureBuilder<DocumentSnapshot>(
+          future: FirestoreRemoteServer.helper.getUserInformation(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              Map<String, dynamic> userData =
+                  snapshot.data.data() as Map<String, dynamic>;
+              return Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      logoWalletter(),
+                      Divider(
+                        height: 70,
+                        endIndent: 100,
+                        indent: 100,
+                      ),
+                      //logoutButton(context),
+                      // SizedBox(
+                      //   height: 30,
+                      // ),
+                      userName(userData),
+                      Divider(
+                        height: 70,
+                        endIndent: 100,
+                        indent: 100,
+                      ),
+                      userInformations(userData)
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
-          ;
-          return Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: Center(
-              child: Text("Carregando..."),
-            ),
-          );
-        },
-      );
-    });
+              );
+            } else {
+              return Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.greenAccent.shade700,
+                  ),
+                ),
+              );
+            }
+          },
+        );
+      },
+    );
   }
 
   Widget userInformations(Map<dynamic, dynamic> userData) {
@@ -91,7 +95,7 @@ class UserScreen extends StatelessWidget {
                 "Idade: ",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text("${userData['idade']}"),
+              Text("${(userData['idade']).round()}"),
             ],
           ),
           Row(
@@ -109,7 +113,8 @@ class UserScreen extends StatelessWidget {
                 "Dependentes: ",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text("Não"),
+              if (userData['dependents']) Text("Sim"),
+              if (!userData['dependents']) Text("Não"),
             ],
           ),
           Row(
@@ -118,7 +123,8 @@ class UserScreen extends StatelessWidget {
                 "Cartão de crédito: ",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text("Sim"),
+              if (userData['creditCard']) Text("Sim"),
+              if (!userData['creditCard']) Text("Não"),
             ],
           ),
         ],
@@ -169,17 +175,13 @@ class UserScreen extends StatelessWidget {
   }
 
   Widget userName(Map<dynamic, dynamic> userData) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "User: ",
-          style: TextStyle(fontSize: 16),
-        ),
-        Text(
           "${userData['fullName']}",
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
