@@ -5,6 +5,7 @@ import 'package:walletter/logic/manage_db/manage_db_event.dart';
 import 'package:walletter/logic/manage_db/manage_firestore_db_bloc.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
+import 'package:walletter/model/transactionModel.dart';
 
 class TransactionsList extends StatefulWidget {
   @override
@@ -72,13 +73,14 @@ class _TransactionsListState extends State<TransactionsList> {
                 padding: EdgeInsets.only(left: 20.0),
                 margin: EdgeInsets.only(bottom: 5, top: 5),
               ),
-              child: listviewCard(transactionList, position, currencyFormatter),
+              child: listviewCard(
+                  transactionList, idList, position, currencyFormatter),
             ),
           );
         });
   }
 
-  Card listviewCard(transactionList, position, currencyFormatter) {
+  Card listviewCard(transactionList, idList, position, currencyFormatter) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       elevation: 3,
@@ -92,12 +94,22 @@ class _TransactionsListState extends State<TransactionsList> {
         trailing: Text(
           "R\$ ${currencyFormatter.format(double.tryParse(transactionList[position].value))}",
           style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: colors[
-                  translateCategory[transactionList[position].category]]),
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color:
+                colors[translateCategory[transactionList[position].category]],
+          ),
         ),
-        // onTap: ,
+        onTap: () {
+          BlocProvider.of<ManageFirestoreBloc>(context).add(
+            UpdateRequest(
+              transactionId: idList[position],
+              previousTransaction: TransactionForm.fromMap(
+                transactionList[position].toMap(),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

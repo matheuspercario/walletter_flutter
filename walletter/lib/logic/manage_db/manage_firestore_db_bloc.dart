@@ -11,8 +11,21 @@ class ManageFirestoreBloc extends Bloc<ManageEvent, ManageState> {
     if (event is DeleteEvent) {
       FirestoreRemoteServer.helper.deleteTransaction(event.transactionId);
       yield InsertState();
+    } else if (event is UpdateRequest) {
+      yield UpdateState(
+        transactionId: event.transactionId,
+        previousTransaction: event.previousTransaction,
+      );
+    } else if (event is UpdateCancel) {
+      yield InsertState();
     } else if (event is SubmitEvent) {
-      FirestoreRemoteServer.helper.insertTransaction(event.transaction);
+      if (state is InsertState) {
+        FirestoreRemoteServer.helper.insertTransaction(event.transaction);
+      } else if (state is UpdateState) {
+        UpdateState updateState = state;
+        FirestoreRemoteServer.helper.updateTransaction(updateState.transactionId, event.transaction);
+        yield InsertState();
+      }
     }
   }
 }

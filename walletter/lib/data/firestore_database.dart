@@ -105,14 +105,22 @@ class FirestoreRemoteServer {
     });
   }
 
-  // UPDATE NOTE
-  // Future<void> updateNote(String noteId, TransactionForm transaction) async {
-  //   await transactionCollection
-  //       .doc(uid)
-  //       .collection("my_transactions")
-  //       .doc("$noteId")
-  //       .update({"title": note.title, "description": note.description});
-  // }
+  // UPDATE TRANSACTION
+  Future<void> updateTransaction(
+      String transactionId, TransactionForm transaction) async {
+    await transactionCollection
+        .doc(uid)
+        .collection("my_transactions")
+        .doc("$transactionId")
+        .update(
+      {
+        "value": transaction.value,
+        "date": transaction.date,
+        "description": transaction.description,
+        "category": transaction.category,
+      },
+    );
+  }
 
   // DELETE TRANSACTION
   Future<void> deleteTransaction(String transactionId) async {
