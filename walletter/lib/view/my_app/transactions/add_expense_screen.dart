@@ -131,6 +131,9 @@ class _AddExpenseState extends State<AddExpense> {
         return null;
       },
       onSaved: (String inValue) {
+        if (expenseForm.description == "") {
+          expenseForm.description = "Sem descrição";
+        }
         expenseForm.description = inValue.trim();
       },
     );

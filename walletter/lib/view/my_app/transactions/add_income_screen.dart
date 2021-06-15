@@ -107,8 +107,7 @@ class _AddIncomeState extends State<AddIncome> {
         });
       },
       onSaved: (_) {
-        incomeForm.date =
-            DateFormat("dd/MM/yyyy").format(_dateTime).toString();
+        incomeForm.date = DateFormat("dd/MM/yyyy").format(_dateTime).toString();
       },
     );
   }
@@ -131,6 +130,9 @@ class _AddIncomeState extends State<AddIncome> {
         return null;
       },
       onSaved: (String inValue) {
+        if (incomeForm.description == "") {
+          incomeForm.description = "Sem descrição";
+        }
         incomeForm.description = inValue.trim();
       },
     );

@@ -100,6 +100,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Card myCard() {
     return Card(
+      color: Colors.grey.shade200,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
       elevation: 10,
       child: Container(
         width: 350,
@@ -119,56 +123,55 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            Container(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.monetization_on_rounded,
-                      color: Colors.green,
-                      size: 40.0,
-                    ),
-                    Text("         "),
-                    BlocBuilder<MonitorBloc, MonitorState>(
-                      builder: (context, state) {
-                        return FutureBuilder<dynamic>(
-                          future:
-                              FirestoreRemoteServer.helper.getCurrentMoney(),
-                          builder: (context, double) {
-                            // Intl.defaultLocale = 'pt_BR';
-                            final currencyFormatter = NumberFormat.currency(
-                                locale: 'pt_BR', customPattern: "#,##0.00");
-                            if (double.connectionState ==
-                                ConnectionState.done) {
-                              return Text(
-                                "${currencyFormatter.format(double.data)}",
+            BlocBuilder<MonitorBloc, MonitorState>(
+              builder: (context, state) {
+                return FutureBuilder<dynamic>(
+                  future: FirestoreRemoteServer.helper.getCurrentMoney(),
+                  builder: (context, currentMoney) {
+                    final currencyFormatter = NumberFormat.currency(
+                      locale: 'pt_BR',
+                      customPattern: "#,##0.00",
+                    );
+                    if (currentMoney.connectionState == ConnectionState.done) {
+                      return Container(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.monetization_on_rounded,
+                                color: (currentMoney.data >= 0)
+                                    ? Colors.green
+                                    : Colors.red,
+                                size: 40.0,
+                              ),
+                              Text("         "),
+                              Text(
+                                "${currencyFormatter.format(currentMoney.data)}",
                                 style: TextStyle(
-                                    color: Colors.green,
+                                    color: (currentMoney.data >= 0)
+                                        ? Colors.green
+                                        : Colors.red,
                                     fontSize: 40,
                                     fontWeight: FontWeight.bold),
-                              );
-                            } else {
-                              return CircularProgressIndicator(
-                                color: Colors.greenAccent.shade700,
-                              );
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            )
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    } else {
+                      return CircularProgressIndicator(
+                        color: Colors.greenAccent.shade700,
+                      );
+                    }
+                  },
+                );
+              },
+            ),
           ],
         ),
-      ),
-      color: Colors.grey.shade200,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
       ),
     );
   }
