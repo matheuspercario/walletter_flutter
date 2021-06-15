@@ -131,6 +131,9 @@ class _AddExpenseState extends State<AddExpense> {
         return null;
       },
       onSaved: (String inValue) {
+        if (expenseForm.description == "") {
+          expenseForm.description = "Sem descrição";
+        }
         expenseForm.description = inValue.trim();
       },
     );
@@ -161,7 +164,7 @@ class _AddExpenseState extends State<AddExpense> {
         return null;
       },
       onSaved: (var inValue) {
-        expenseForm.value = inValue.split(" ")[1];
+        expenseForm.value = inValue.split(" ")[1].replaceAll(",", "");
       },
     );
   }

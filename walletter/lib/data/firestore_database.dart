@@ -8,12 +8,11 @@ class FirestoreRemoteServer {
   /// Criando Singlton
   ///
   static FirestoreRemoteServer helper = FirestoreRemoteServer._createInstance();
+
   FirestoreRemoteServer._createInstance();
 
   final CollectionReference transactionCollection =
       FirebaseFirestore.instance.collection("transactions");
-
-  final db = FirebaseFirestore.instance;
 
   /// Metodos dados usuario
   includeUserData(
@@ -43,6 +42,32 @@ class FirestoreRemoteServer {
     });
   }
 
+  Future<double> getCurrentMoney() async {
+    QuerySnapshot snapshots = await transactionCollection
+        .doc(uid)
+        .collection("my_transactions")
+        .get();
+
+    double total = 0.0;
+
+    for (var doc in snapshots.docs) {
+      TransactionForm transaction = TransactionForm.fromMap(doc.data());
+
+      if (transaction.category == "income") {
+        total += double.tryParse(transaction.value);
+      } else {
+        total -= double.tryParse(transaction.value);
+      }
+    }
+    return total;
+  }
+
+  // GET INFORMATIONS LIST
+  Future<DocumentSnapshot> getUserInformation() async {
+    DocumentSnapshot document = await transactionCollection.doc(uid).get();
+    return document;
+  }
+
   // Mapeia os snapshots (documents) em um map
   List _transactionListFromSnapshot(QuerySnapshot snapshots) {
     List<TransactionForm> transactionList = [];
@@ -53,6 +78,7 @@ class FirestoreRemoteServer {
       transactionList.add(transaction);
       idList.add(doc.id);
     }
+
     return [transactionList, idList];
   }
 
@@ -61,6 +87,7 @@ class FirestoreRemoteServer {
     QuerySnapshot snapshot = await transactionCollection
         .doc(uid)
         .collection("my_transactions")
+        .orderBy("date", descending: true)
         .get();
 
     // Invocar método auxilar

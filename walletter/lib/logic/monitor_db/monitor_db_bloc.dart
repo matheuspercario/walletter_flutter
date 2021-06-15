@@ -10,6 +10,7 @@ class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
 
   List<TransactionForm> firestoreTransactionList;
   List<String> firestoreIdList;
+  Map<dynamic, dynamic> firestoreUserInfo;
 
   MonitorBloc() : super(MonitorState(transactionList: [], idList: [])) {
     add(AskNewList());

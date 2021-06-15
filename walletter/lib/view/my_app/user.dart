@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/data/firestore_database.dart';
 import 'package:walletter/logic/manage_auth/auth_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_event.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
@@ -8,38 +10,58 @@ import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
 class UserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            logoWalletter(),
-            Divider(
-              height: 70,
-              endIndent: 100,
-              indent: 100,
-            ),
-            logoutButton(context),
-            SizedBox(
-              height: 30,
-            ),
-            userName(),
-            Divider(
-              height: 70,
-              endIndent: 100,
-              indent: 100,
-            ),
-            userInformations()
-          ],
-        ),
-      ),
+    return BlocBuilder<MonitorBloc, MonitorState>(
+      builder: (context, state) {
+        return FutureBuilder<DocumentSnapshot>(
+          future: FirestoreRemoteServer.helper.getUserInformation(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              Map<String, dynamic> userData =
+                  snapshot.data.data() as Map<String, dynamic>;
+              return Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      logoWalletter(),
+                      Divider(
+                        height: 70,
+                        endIndent: 100,
+                        indent: 100,
+                      ),
+                      userName(userData),
+                      Divider(
+                        height: 70,
+                        endIndent: 100,
+                        indent: 100,
+                      ),
+                      userInformations(userData)
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.greenAccent.shade700,
+                  ),
+                ),
+              );
+            }
+          },
+        );
+      },
     );
   }
 
-  Widget userInformations() {
+  Widget userInformations(Map<dynamic, dynamic> userData) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 40),
@@ -47,56 +69,47 @@ class UserScreen extends StatelessWidget {
         //mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Informações",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 20,
-          ),
           Row(
             children: [
+              Icon(Icons.email_rounded),
+              SizedBox(width: 15),
               Text(
-                "Nome: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                "${userData['email']}",
+                style: TextStyle(fontSize: 18),
               ),
-              Text("Matheus Bruder"),
             ],
           ),
+          SizedBox(height: 10),
           Row(
             children: [
+              Icon(Icons.calendar_today_rounded),
+              SizedBox(width: 15),
               Text(
-                "Idade: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                "${(userData['idade']).round()} anos",
+                style: TextStyle(fontSize: 18),
               ),
-              Text("22"),
             ],
           ),
+          SizedBox(height: 10),
           Row(
             children: [
-              Text(
-                "Email: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text("mpbruder@gmail.com"),
+              Icon(Icons.credit_card_rounded),
+              SizedBox(width: 15),
+              if (userData['creditCard'])
+                Text("Possui crédito", style: TextStyle(fontSize: 18)),
+              if (!userData['creditCard'])
+                Text("Não possui crédito", style: TextStyle(fontSize: 18)),
             ],
           ),
+          SizedBox(height: 10),
           Row(
             children: [
-              Text(
-                "Dependentes: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text("Não"),
-            ],
-          ),
-          Row(
-            children: [
-              Text(
-                "Cartão de crédito: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text("Sim"),
+              Icon(Icons.people_alt_rounded),
+              SizedBox(width: 15),
+              if (userData['dependents'])
+                Text("Possui dependentes", style: TextStyle(fontSize: 18)),
+              if (!userData['dependents'])
+                Text("Não possui dependentes", style: TextStyle(fontSize: 18)),
             ],
           ),
         ],
@@ -146,25 +159,58 @@ class UserScreen extends StatelessWidget {
     );
   }
 
-  Widget userName() {
-    return Row(
+  Widget userName(Map<dynamic, dynamic> userData) {
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "User: ",
-          style: TextStyle(fontSize: 16),
+          "${userData['fullName']}",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        BlocBuilder<MonitorBloc, MonitorState>(
-          builder: (context, state) {
-            return Text(
-              "Teste",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            );
-          },
-        ),
+        SizedBox(height: 15),
+        if (userData['rendaMensal'] == 1)
+          Text(
+            "Menos que R\$ 1.000,00",
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        if (userData['rendaMensal'] == 2)
+          Text(
+            "R\$ 1.000,00 ~ R\$ 2.500,00",
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        if (userData['rendaMensal'] == 3)
+          Text(
+            "R\$ 2.500,00 ~ R\$ 5.000,00",
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        if (userData['rendaMensal'] == 4)
+          Text(
+            "R\$ 5.000,00 ~ R\$ 10.000,00",
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        if (userData['rendaMensal'] == 5)
+          Text(
+            "Mais que R\$ 10.000,00",
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
       ],
     );
   }

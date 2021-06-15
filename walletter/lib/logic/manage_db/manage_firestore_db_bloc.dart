@@ -10,6 +10,7 @@ class ManageFirestoreBloc extends Bloc<ManageEvent, ManageState> {
   Stream<ManageState> mapEventToState(ManageEvent event) async* {
     if (event is DeleteEvent) {
       FirestoreRemoteServer.helper.deleteTransaction(event.transactionId);
+      yield InsertState();
     } else if (event is SubmitEvent) {
       FirestoreRemoteServer.helper.insertTransaction(event.transaction);
     }

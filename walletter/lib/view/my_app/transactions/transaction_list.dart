@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:walletter/logic/manage_db/manage_db_event.dart';
 import 'package:walletter/logic/manage_db/manage_firestore_db_bloc.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
@@ -30,12 +31,15 @@ class _TransactionsListState extends State<TransactionsList> {
 
   @override
   Widget build(BuildContext context) {
+    final currencyFormatter =
+        NumberFormat.currency(locale: 'pt_BR', customPattern: "#,##0.00");
     return BlocBuilder<MonitorBloc, MonitorState>(builder: (context, state) {
-      return getTransactionList(state.transactionList, state.idList);
+      return getTransactionList(
+          state.transactionList, state.idList, currencyFormatter);
     });
   }
 
-  Widget getTransactionList(transactionList, idList) {
+  Widget getTransactionList(transactionList, idList, currencyFormatter) {
     return ListView.builder(
         itemCount: transactionList.length,
         itemBuilder: (context, position) {
@@ -54,6 +58,7 @@ class _TransactionsListState extends State<TransactionsList> {
                     position,
                   ),
                   barrierDismissible: false,
+                  useRootNavigator: false,
                 );
                 //return true;
               },
@@ -67,16 +72,16 @@ class _TransactionsListState extends State<TransactionsList> {
                 padding: EdgeInsets.only(left: 20.0),
                 margin: EdgeInsets.only(bottom: 5, top: 5),
               ),
-              child: listviewCard(transactionList, position),
+              child: listviewCard(transactionList, position, currencyFormatter),
             ),
           );
         });
   }
 
-  Card listviewCard(transactionList, position) {
+  Card listviewCard(transactionList, position, currencyFormatter) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
-      elevation: 7,
+      elevation: 3,
       child: ListTile(
         title: Text(transactionList[position].description),
         subtitle: Text(transactionList[position].date),
@@ -85,13 +90,14 @@ class _TransactionsListState extends State<TransactionsList> {
           color: colors[translateCategory[transactionList[position].category]],
         ),
         trailing: Text(
-          "R\$ ${transactionList[position].value}",
+          "R\$ ${currencyFormatter.format(double.tryParse(transactionList[position].value))}",
           style: TextStyle(
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: colors[
                   translateCategory[transactionList[position].category]]),
         ),
+        // onTap: ,
       ),
     );
   }
@@ -100,33 +106,37 @@ class _TransactionsListState extends State<TransactionsList> {
     return AlertDialog(
       title: Text(
         "Confirme para prosseguir",
-        style: TextStyle(color: Colors.black87),
       ),
-      content: Text("Você tem certeza de que deseja apagar a transação?",
-          style: TextStyle(color: Colors.black87)),
+      content: Text(
+        "Você tem certeza de que deseja apagar a transação?",
+      ),
       actions: [
         TextButton(
-          child: Text("Sim"),
+          child: Text("Sim", style: TextStyle(color: Colors.white)),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.greenAccent.shade400,
+          ),
           onPressed: () {
+            Navigator.of(context).pop();
             BlocProvider.of<ManageFirestoreBloc>(context).add(
               DeleteEvent(
                 transactionId: idList[position],
               ),
             );
-            Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text("Não"),
+          child: Text("Não", style: TextStyle(color: Colors.white)),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.redAccent.shade400,
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
       ],
-      backgroundColor: Colors.grey.shade100,
-      elevation: 20,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(5),
       ),
     );
   }

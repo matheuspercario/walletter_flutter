@@ -13,7 +13,6 @@ class RegisterPage extends StatefulWidget {
 class RegisterPageState extends State<RegisterPage> {
   GlobalKey<FormState> formKey = new GlobalKey<FormState>();
   final RegisterUser registerData = new RegisterUser();
-  //RegisterForm registerForm = new RegisterForm();
 
   @override
   Widget build(BuildContext context) {
@@ -511,24 +510,30 @@ class RegisterPageState extends State<RegisterPage> {
         "Realmente deseja realizar seu cadastro?",
       ),
       actions: [
-        ElevatedButton(
+        TextButton(
           onPressed: () {
             registerData.confirmed = true;
             formKey.currentState.save();
             Navigator.of(context).pop();
             BlocProvider.of<AuthBloc>(context).add(registerData);
           },
-          child: Text("Sim"),
+          child: Text(
+            "Sim",
+            style: TextStyle(color: Colors.white),
+          ),
           style: ElevatedButton.styleFrom(
             primary: Colors.greenAccent.shade400,
           ),
         ),
-        ElevatedButton(
+        TextButton(
           onPressed: () {
             registerData.confirmed = false;
             Navigator.of(context).pop();
           },
-          child: Text("Não"),
+          child: Text(
+            "Não",
+            style: TextStyle(color: Colors.white),
+          ),
           style: ElevatedButton.styleFrom(
             primary: Colors.redAccent.shade400,
           ),

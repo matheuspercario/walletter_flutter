@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_bloc.dart';
+import 'package:walletter/logic/manage_auth/auth_event.dart';
 import 'package:walletter/logic/manage_db/manage_firestore_db_bloc.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
 import 'package:walletter/view/my_app/transactions/transaction_list.dart';
@@ -44,6 +46,16 @@ class _BottomNavigationState extends State<BottomNavigation> {
             style: TextStyle(fontSize: 20),
           ),
           backgroundColor: Colors.greenAccent.shade700,
+          actions: [
+            TextButton.icon(
+              style: TextButton.styleFrom(primary: Colors.white),
+              onPressed: () {
+                BlocProvider.of<AuthBloc>(context).add(Logout());
+              },
+              label: Text("Logout"),
+              icon: Icon(Icons.logout),
+            )
+          ],
         ),
         body: _pages[_currentIndex],
         bottomNavigationBar: BottomAppBar(
@@ -62,8 +74,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 ),
               ),
               child: BottomNavigationBar(
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
                 currentIndex: _currentIndex,
-                backgroundColor: Colors.grey.shade900,
+                backgroundColor: Color.fromARGB(255, 40, 40, 40),
                 selectedItemColor: Colors.white,
                 onTap: (index) {
                   setState(() {
@@ -72,10 +86,18 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 },
                 items: [
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.list_sharp), label: 'Transações'),
+                      icon: Icon(
+                        Icons.library_books_rounded,
+                        size: 25,
+                      ),
+                      label: ''),
                   BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.person), label: 'Perfil')
+                      icon: Icon(
+                        Icons.person,
+                        size: 25,
+                      ),
+                      label: '')
                 ],
               ),
             ),
@@ -88,11 +110,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
           child: FloatingActionButton(
             backgroundColor: _currentIndex == 1
                 ? Colors.grey.shade300
-                : Colors.grey.shade900,
+                : Color.fromARGB(255, 40, 40, 40),
             child: Icon(Icons.home),
-            onPressed: () => setState(() {
-              _currentIndex = 1;
-            }),
+            onPressed: () => setState(
+              () {
+                _currentIndex = 1;
+              },
+            ),
           ),
         ),
       ),
