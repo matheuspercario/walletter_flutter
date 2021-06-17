@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_state.dart';
-import 'package:walletter/logic/manage_db/manage_db_state.dart';
 import 'package:walletter/logic/manage_db/manage_firestore_db_bloc.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
 import 'package:walletter/view/auth/login.dart';

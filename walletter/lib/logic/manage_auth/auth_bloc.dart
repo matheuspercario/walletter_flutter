@@ -8,8 +8,9 @@ import 'package:walletter/logic/manage_auth/auth_state.dart';
 import 'package:walletter/model/user.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  StreamSubscription _authenticationStream;
   FirebaseAuthenticationService _authenticationService;
+  // ignore: unused_field
+  StreamSubscription _authenticationStream;
 
   AuthBloc() : super(Unauthenticated()) {
     _authenticationService = FirebaseAuthenticationService();
