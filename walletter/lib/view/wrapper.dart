@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_bloc.dart';
 import 'package:walletter/logic/manage_auth/auth_state.dart';
+import 'package:walletter/logic/manage_db/manage_db_state.dart';
+import 'package:walletter/logic/manage_db/manage_firestore_db_bloc.dart';
+import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
 import 'package:walletter/view/auth/login.dart';
 import 'package:walletter/view/auth/register.dart';
 import 'package:walletter/view/my_app/transactions/add_expense_screen.dart';
@@ -68,20 +71,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Walletter',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
-        textTheme: TextTheme(),
-        accentColor: Colors.white,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => MonitorBloc()),
+        BlocProvider(create: (_) => ManageFirestoreBloc()),
+      ],
+      // Permitir update
+
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Walletter',
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          primarySwatch: Colors.blue,
+          textTheme: TextTheme(),
+          accentColor: Colors.white,
+        ),
+        routes: {
+          '/': (context) => BottomNavigation(),
+          '/add_income': (context) => AddIncome(),
+          '/add_expense': (context) => AddExpense(),
+        },
       ),
-      routes: {
-        '/': (context) => BottomNavigation(),
-        '/add_income': (context) => AddIncome(),
-        '/add_expense': (context) => AddExpense(),
-      },
     ); // Gerenciador de Estados Automático
   }
 }

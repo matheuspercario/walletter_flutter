@@ -19,28 +19,28 @@ class _AddIncomeState extends State<AddIncome> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ManageFirestoreBloc(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Nova Receita',
-          ),
-          backgroundColor: Colors.greenAccent.shade700,
+    return Scaffold(
+      appBar: AppBar(
+        title: BlocBuilder<ManageFirestoreBloc, ManageState>(
+          builder: (context, state) {
+            return Text(
+                state is InsertState ? 'Nova Receita' : "Atualizar Receita");
+          },
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(right: 50, left: 50),
-                  child: myIncomeForm(),
-                )
-              ],
-            ),
+        backgroundColor: Colors.greenAccent.shade700,
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 50, left: 50),
+                child: myIncomeForm(),
+              )
+            ],
           ),
         ),
       ),
@@ -51,7 +51,13 @@ class _AddIncomeState extends State<AddIncome> {
     return BlocBuilder<ManageFirestoreBloc, ManageState>(
         builder: (context, state) {
       TransactionForm incomeForm;
-      incomeForm = new TransactionForm();
+      if (state is UpdateState) {
+        incomeForm = state.previousTransaction;
+        _dateTime =
+            DateFormat("dd/MM/yyyy").parse(state.previousTransaction.date);
+      } else {
+        incomeForm = new TransactionForm();
+      }
 
       return Form(
         key: formKeyIncome,
@@ -72,7 +78,15 @@ class _AddIncomeState extends State<AddIncome> {
             SizedBox(
               height: 100,
             ),
-            submitInformations(incomeForm, context),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                submitButton(incomeForm, context),
+                state is UpdateState
+                    ? cancelButton(state, context)
+                    : Container()
+              ],
+            ),
             SizedBox(
               height: 50,
             ),
@@ -114,6 +128,7 @@ class _AddIncomeState extends State<AddIncome> {
 
   Widget valueDescriptionForm(TransactionForm incomeForm) {
     return TextFormField(
+      initialValue: incomeForm.description,
       keyboardType: TextInputType.multiline,
       maxLines: null,
       decoration: InputDecoration(
@@ -140,6 +155,7 @@ class _AddIncomeState extends State<AddIncome> {
 
   Widget valueInputForm(TransactionForm incomeForm) {
     return TextFormField(
+      initialValue: incomeForm.value,
       style: TextStyle(fontSize: 32),
       inputFormatters: [
         CurrencyTextInputFormatter(
@@ -168,7 +184,7 @@ class _AddIncomeState extends State<AddIncome> {
     );
   }
 
-  Widget submitInformations(TransactionForm incomeForm, context) {
+  Widget submitButton(TransactionForm incomeForm, context) {
     return ElevatedButton(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -192,6 +208,28 @@ class _AddIncomeState extends State<AddIncome> {
               .add(SubmitEvent(transaction: incomeForm));
           Navigator.pop(context);
         }
+      },
+    );
+  }
+
+  Widget cancelButton(state, context) {
+    return ElevatedButton(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Icon(
+          Icons.remove_done_rounded,
+          color: Colors.white,
+          size: 40.0,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        elevation: 10,
+        primary: Colors.grey.shade600,
+        shape: CircleBorder(),
+      ),
+      onPressed: () {
+        BlocProvider.of<ManageFirestoreBloc>(context).add(UpdateCancel());
+        Navigator.pop(context);
       },
     );
   }

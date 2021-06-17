@@ -42,8 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                addIncome(),
-                addExpense(),
+                addIncomeButton(),
+                addExpenseButton(),
               ],
             ),
           ),
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget addIncome() {
+  Widget addIncomeButton() {
     return ElevatedButton(
       onPressed: () {
         Navigator.pushNamed(context, '/add_income');
@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget addExpense() {
+  Widget addExpenseButton() {
     return ElevatedButton(
       onPressed: () {
         Navigator.pushNamed(context, '/add_expense');
