@@ -49,51 +49,52 @@ class _AddIncomeState extends State<AddIncome> {
 
   Widget myIncomeForm() {
     return BlocBuilder<ManageFirestoreBloc, ManageState>(
-        builder: (context, state) {
-      TransactionForm incomeForm;
-      if (state is UpdateState) {
-        incomeForm = state.previousTransaction;
-        _dateTime =
-            DateFormat("dd/MM/yyyy").parse(state.previousTransaction.date);
-      } else {
-        incomeForm = new TransactionForm();
-      }
+      builder: (context, state) {
+        TransactionForm incomeForm;
+        if (state is UpdateState) {
+          incomeForm = state.previousTransaction;
+          _dateTime =
+              DateFormat("dd/MM/yyyy").parse(state.previousTransaction.date);
+        } else {
+          incomeForm = new TransactionForm();
+        }
 
-      return Form(
-        key: formKeyIncome,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 120,
-            ),
-            valueInputForm(incomeForm),
-            SizedBox(
-              height: 70,
-            ),
-            valueDateForm(incomeForm),
-            SizedBox(
-              height: 20,
-            ),
-            valueDescriptionForm(incomeForm),
-            SizedBox(
-              height: 100,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                submitButton(incomeForm, context),
-                state is UpdateState
-                    ? cancelButton(state, context)
-                    : Container()
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            ),
-          ],
-        ),
-      );
-    });
+        return Form(
+          key: formKeyIncome,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 120,
+              ),
+              valueInputForm(incomeForm, state),
+              SizedBox(
+                height: 70,
+              ),
+              valueDateForm(incomeForm),
+              SizedBox(
+                height: 20,
+              ),
+              valueDescriptionForm(incomeForm),
+              SizedBox(
+                height: 100,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  submitButton(incomeForm, context),
+                  state is UpdateState
+                      ? cancelButton(state, context)
+                      : Container()
+                ],
+              ),
+              SizedBox(
+                height: 50,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget valueDateForm(TransactionForm incomeForm) {
@@ -153,9 +154,9 @@ class _AddIncomeState extends State<AddIncome> {
     );
   }
 
-  Widget valueInputForm(TransactionForm incomeForm) {
+  Widget valueInputForm(TransactionForm incomeForm, state) {
     return TextFormField(
-      initialValue: incomeForm.value,
+      // initialValue: incomeForm.value,
       style: TextStyle(fontSize: 32),
       inputFormatters: [
         CurrencyTextInputFormatter(
@@ -165,7 +166,7 @@ class _AddIncomeState extends State<AddIncome> {
       ],
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        hintText: "R\$ 0.00",
+        hintText: state is UpdateState ? "R\$ ${incomeForm.value}" : "R\$ 0.00",
         // labelText: "Insira o valor",
         suffixIcon: Icon(
           Icons.add_circle_rounded,

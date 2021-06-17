@@ -66,7 +66,7 @@ class _AddExpenseState extends State<AddExpense> {
               SizedBox(
                 height: 120,
               ),
-              valueInputForm(expenseForm),
+              valueInputForm(expenseForm, state),
               SizedBox(
                 height: 70,
               ),
@@ -155,7 +155,7 @@ class _AddExpenseState extends State<AddExpense> {
     );
   }
 
-  Widget valueInputForm(TransactionForm expenseForm) {
+  Widget valueInputForm(TransactionForm expenseForm, state) {
     return TextFormField(
       initialValue: expenseForm.value,
       style: TextStyle(fontSize: 32),
@@ -167,7 +167,8 @@ class _AddExpenseState extends State<AddExpense> {
       ],
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        hintText: "R\$ 0.00",
+        hintText:
+            state is UpdateState ? "R\$ ${expenseForm.value}" : "R\$ 0.00",
         // labelText: "Insira o valor",
         suffixIcon: Icon(
           Icons.remove_circle_rounded,
