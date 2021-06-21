@@ -156,7 +156,6 @@ class _AddIncomeState extends State<AddIncome> {
 
   Widget valueInputForm(TransactionForm incomeForm, state) {
     return TextFormField(
-      // initialValue: incomeForm.value,
       style: TextStyle(fontSize: 32),
       inputFormatters: [
         CurrencyTextInputFormatter(

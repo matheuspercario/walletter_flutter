@@ -157,7 +157,6 @@ class _AddExpenseState extends State<AddExpense> {
 
   Widget valueInputForm(TransactionForm expenseForm, state) {
     return TextFormField(
-      initialValue: expenseForm.value,
       style: TextStyle(fontSize: 32),
       inputFormatters: [
         CurrencyTextInputFormatter(
