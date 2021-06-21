@@ -7,6 +7,14 @@ class DeleteEvent extends ManageEvent {
   DeleteEvent({this.transactionId});
 }
 
+class UpdateRequest extends ManageEvent {
+  var transactionId;
+  TransactionForm previousTransaction;
+  UpdateRequest({this.transactionId, this.previousTransaction});
+}
+
+class UpdateCancel extends ManageEvent {}
+
 class SubmitEvent extends ManageEvent {
   TransactionForm transaction;
   SubmitEvent({this.transaction});

@@ -5,6 +5,7 @@ import 'package:walletter/logic/manage_db/manage_db_event.dart';
 import 'package:walletter/logic/manage_db/manage_firestore_db_bloc.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_state.dart';
 import 'package:walletter/logic/monitor_db/monitor_db_bloc.dart';
+import 'package:walletter/model/transactionModel.dart';
 
 class TransactionsList extends StatefulWidget {
   @override
@@ -33,6 +34,7 @@ class _TransactionsListState extends State<TransactionsList> {
   Widget build(BuildContext context) {
     final currencyFormatter =
         NumberFormat.currency(locale: 'pt_BR', customPattern: "#,##0.00");
+
     return BlocBuilder<MonitorBloc, MonitorState>(builder: (context, state) {
       return getTransactionList(
           state.transactionList, state.idList, currencyFormatter);
@@ -41,64 +43,77 @@ class _TransactionsListState extends State<TransactionsList> {
 
   Widget getTransactionList(transactionList, idList, currencyFormatter) {
     return ListView.builder(
-        itemCount: transactionList.length,
-        itemBuilder: (context, position) {
-          return Tooltip(
-            message: 'Deslize para deletar',
-            child: Dismissible(
-              key: ValueKey(123),
-              direction: DismissDirection.startToEnd,
-              // ignore: missing_return
-              confirmDismiss: (direction) async {
-                await showDialog(
-                  context: context,
-                  builder: (_) => generateConfirmationDialog(
-                    transactionList,
-                    idList,
-                    position,
-                  ),
-                  barrierDismissible: false,
-                  useRootNavigator: false,
-                );
-                //return true;
-              },
-              background: Container(
-                color: Colors.redAccent.shade400,
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.white,
+      itemCount: transactionList.length,
+      itemBuilder: (context, position) {
+        return Tooltip(
+          message: 'Deslize para deletar',
+          child: Dismissible(
+            key: ValueKey(123),
+            direction: DismissDirection.startToEnd,
+            // ignore: missing_return
+            confirmDismiss: (direction) async {
+              await showDialog(
+                context: context,
+                builder: (_) => generateConfirmationDialog(
+                  transactionList,
+                  idList,
+                  position,
                 ),
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 20.0),
-                margin: EdgeInsets.only(bottom: 5, top: 5),
+                barrierDismissible: false,
+                useRootNavigator: false,
+              );
+              //return true;
+            },
+            background: Container(
+              color: Colors.redAccent.shade400,
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
               ),
-              child: listviewCard(transactionList, position, currencyFormatter),
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: 20.0),
+              margin: EdgeInsets.only(bottom: 5, top: 5),
             ),
-          );
-        });
-  }
-
-  Card listviewCard(transactionList, position, currencyFormatter) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      elevation: 3,
-      child: ListTile(
-        title: Text(transactionList[position].description),
-        subtitle: Text(transactionList[position].date),
-        leading: Icon(
-          icons[translateCategory[transactionList[position].category]],
-          color: colors[translateCategory[transactionList[position].category]],
-        ),
-        trailing: Text(
-          "R\$ ${currencyFormatter.format(double.tryParse(transactionList[position].value))}",
-          style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: colors[
-                  translateCategory[transactionList[position].category]]),
-        ),
-        // onTap: ,
-      ),
+            child: Card(
+              margin: EdgeInsets.symmetric(vertical: 5),
+              elevation: 3,
+              child: ListTile(
+                title: Text(transactionList[position].description),
+                subtitle: Text(transactionList[position].date),
+                leading: Icon(
+                  icons[translateCategory[transactionList[position].category]],
+                  color: colors[
+                      translateCategory[transactionList[position].category]],
+                ),
+                trailing: Text(
+                  "R\$ ${currencyFormatter.format(double.tryParse(transactionList[position].value))}",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: colors[
+                        translateCategory[transactionList[position].category]],
+                  ),
+                ),
+                onTap: () {
+                  BlocProvider.of<ManageFirestoreBloc>(context).add(
+                    UpdateRequest(
+                      transactionId: idList[position],
+                      previousTransaction: TransactionForm.fromMap(
+                        transactionList[position].toMap(),
+                      ),
+                    ),
+                  );
+                  if (transactionList[position].category == "income") {
+                    Navigator.pushNamed(context, '/add_income');
+                  } else {
+                    Navigator.pushNamed(context, '/add_expense');
+                  }
+                },
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
