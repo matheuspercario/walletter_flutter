@@ -33,10 +33,10 @@ class FirebaseAuthenticationService {
     var creditCard,
     var idade,
     var rendaMensal,
-    var has_Casa,
-    var has_Carro,
-    var has_Moto,
-    var has_Bicicleta,
+    var hasCasa,
+    var hasCarro,
+    var hasMoto,
+    var hasBicicleta,
   }) async {
     UserCredential authResult =
         await _firebaseAuth.createUserWithEmailAndPassword(
@@ -54,10 +54,10 @@ class FirebaseAuthenticationService {
       creditCard,
       idade,
       rendaMensal,
-      has_Casa,
-      has_Carro,
-      has_Moto,
-      has_Bicicleta,
+      hasCasa,
+      hasCarro,
+      hasMoto,
+      hasBicicleta,
     );
 
     return UserModel(user.uid);

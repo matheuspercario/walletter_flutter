@@ -23,10 +23,10 @@ class FirestoreRemoteServer {
     var creditCard,
     var idade,
     var rendaMensal,
-    var has_Casa,
-    var has_Carro,
-    var has_Moto,
-    var has_Bicicleta,
+    var hasCasa,
+    var hasCarro,
+    var hasMoto,
+    var hasBicicleta,
   ) async {
     await transactionCollection.doc(uid).set({
       "fullName": fullName,
@@ -35,10 +35,10 @@ class FirestoreRemoteServer {
       "rendaMensal": rendaMensal,
       "dependents": dependents,
       "creditCard": creditCard,
-      "has_Casa": has_Casa,
-      "has_Carro": has_Carro,
-      "has_Moto": has_Moto,
-      "has_Bicicleta": has_Bicicleta,
+      "has_Casa": hasCasa,
+      "has_Carro": hasCarro,
+      "has_Moto": hasMoto,
+      "has_Bicicleta": hasBicicleta,
     });
   }
 

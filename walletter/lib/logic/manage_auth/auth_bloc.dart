@@ -35,10 +35,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           creditCard: event.switchCreditCard,
           idade: event.sliderValue,
           rendaMensal: event.radioValue,
-          has_Casa: event.checkBoxCasa,
-          has_Carro: event.checkBoxCarro,
-          has_Moto: event.checkBoxMoto,
-          has_Bicicleta: event.checkBoxBicicleta,
+          hasCasa: event.checkBoxCasa,
+          hasCarro: event.checkBoxCarro,
+          hasMoto: event.checkBoxMoto,
+          hasBicicleta: event.checkBoxBicicleta,
         );
       } else if (event is LoginUser) {
         await _authenticationService.signInWithEmailAndPassword(
