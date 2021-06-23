@@ -8,9 +8,9 @@
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/matheuspercario/walletter_flutter?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/matheuspercario/walletter_flutter?style=for-the-badge)
 
-<img src="static/images/walletter-login.png" width="200" alt="imagem login" style="display: inline-block">
-<img src="static/images/walletter-home.png" width="200" alt="imagem home" style="display: inline-block">
-<img src="static/images/walletter-user.png" width="200" alt="imagem user">
+| Login | Home | User |
+| ------------------- | ------------------- | ------------------- |
+| <img src="static/images/walletter-login.png" width="200" alt="imagem login"> | <img src="static/images/walletter-home.png" width="200" alt="imagem home"> | <img src="static/images/walletter-user.png" width="200" alt="imagem user"> |
 
 > Este projeto foi desenvolvido durante a disciplina de Dispositivos Móveis (SI700) da Faculdade de Tecnologia da Unicamp. O objetivo foi desenvolver um app financeiro, ou seja, a finalidade do Walletter é auxiliar o controle financeiros dos usuários da maneira mais fácil e intuitiva possível.
 
